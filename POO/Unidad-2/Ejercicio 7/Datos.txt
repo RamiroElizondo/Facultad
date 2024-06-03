@@ -1,0 +1,4 @@
+100,44844771,Ramiro,Elizondo,4000
+200,45789648,Juan,Perez,6000
+300,43978458,Octavio,Garello,2500
+400,44598769,Fabricio,Rubio,4000

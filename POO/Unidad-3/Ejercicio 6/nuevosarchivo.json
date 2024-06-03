@@ -1,0 +1,84 @@
+[
+	{
+		"__class__": "Televisor",
+		"__atributos__": {
+			"marca": "Philips",
+			"modelo": "grande",
+			"color": "gris",
+			"pais": "Chile",
+			"precio": 201212.0,
+			"capacidadL": "2120x2921",
+			"velocidad": 1,
+			"cantidadP": "HD",
+			"tipoC": false
+		}
+	},
+	{
+		"__class__": "Heladera",
+		"__atributos__": {
+			"marca": "Philips",
+			"modelo": "FKROA",
+			"color": "Negro",
+			"pais": "Argentina",
+			"precio": 325000.0,
+			"capacidadL": 2300,
+			"velocidad": true,
+			"cantidadP": false
+		}
+	},
+	{
+		"__class__": "Lavarropa",
+		"__atributos__": {
+			"marca": "Liliana",
+			"modelo": "45LDKN",
+			"color": "Blanco",
+			"pais": "Argentina",
+			"precio": 450000.0,
+			"capacidadL": 0,
+			"velocidad": 2300,
+			"cantidadP": 2,
+			"tipoC": "Superior"
+		}
+	},
+	{
+		"__class__": "Televisor",
+		"__atributos__": {
+			"marca": "Hitachi",
+			"modelo": "IIOER89",
+			"color": "Blanco",
+			"pais": "USA",
+			"precio": 45400.0,
+			"capacidadL": "LCD",
+			"velocidad": 55,
+			"cantidadP": "HD",
+			"tipoC": true
+		}
+	},
+	{
+		"__class__": "Lavarropa",
+		"__atributos__": {
+			"marca": "Liliana",
+			"modelo": "chica",
+			"color": "blanca",
+			"pais": "Peru",
+			"precio": 201213.0,
+			"capacidadL": 0,
+			"velocidad": 2,
+			"cantidadP": 1,
+			"tipoC": "Superior"
+		}
+	},
+	{
+		"__class__": "Heladera",
+		"__atributos__": {
+			"marca": "Philips",
+			"modelo": "larga",
+			"color": "Azul",
+			"pais": "Espa\u00f1a",
+			"precio": 23921.0,
+			"capacidadL": 34,
+			"velocidad": true,
+			"cantidadP": false
+		}
+	}
+]

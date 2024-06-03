@@ -1,0 +1,89 @@
+[
+    {
+        "__class__": "Docente",
+        "__atributos__": {
+            "cuil": "20-3454506-8",
+            "apellido": "Perez",
+            "nombre": "Nicolas",
+            "sueldoB": 89000,
+            "antiguedad": 3,
+            "carrera": "LCC",
+            "cargo": "Semiexclusivo",
+            "catedra": "Sistemas de Informacion"
+        }
+    },
+    {
+        "__class__": "Investigador",
+        "__atributos__": {
+            "cuil": "15-324235-5",
+            "apellido": "Dominguez",
+            "nombre": "Juan",
+            "sueldoB": 120000,
+            "antiguedad": 2,
+            "areaInvestigacion": "Computacional",
+            "tipoInvestigacion": "Cientifica"
+        }
+    },
+    {
+        "__class__": "PersonalApoyo",
+        "__atributos__": {
+            "cuil": "12-456543-4",
+            "apellido": "Castro",
+            "nombre": "Maria",
+            "sueldoB": 140000,
+            "antiguedad": 2,
+            "categoria": 12
+        }
+    },
+    {
+        "__class__": "DocenteInvestigador",
+        "__atributos__": {
+            "cuil": "18-3446706-8",
+            "apellido": "Zarate",
+            "nombre": "Marcos",
+            "sueldoB": 89000,
+            "antiguedad": 3,
+            "carrera": "LCC",
+            "cargo": "Exclusivo",
+            "catedra": "EyFCI",
+            "areaInvestigacion": "Estructuras",
+            "tipoInvestigacion": "Teorica",
+            "categoria": "III",
+            "importe": 25000
+        }
+    },
+    {
+        "__class__": "DocenteInvestigador",
+        "__atributos__": {
+            "cuil": "18-3446706-8",
+            "apellido": "Lopez",
+            "nombre": "Agustin",
+            "sueldoB": 89000,
+            "antiguedad": 3,
+            "carrera": "LCC",
+            "cargo": "Semiexclusivo",
+            "catedra": "EyFCI",
+            "areaInvestigacion": "Estructuras",
+            "tipoInvestigacion": "Teorica",
+            "categoria": "IV",
+            "importe": 25000
+        }
+    },
+    {
+        "__class__": "DocenteInvestigador",
+        "__atributos__": {
+            "cuil": "18-3446706-8",
+            "apellido": "Ortiz",
+            "nombre": "Zariel",
+            "sueldoB": 89000,
+            "antiguedad": 3,
+            "carrera": "LCC",
+            "cargo": "Exclusivo",
+            "catedra": "EyFCI",
+            "areaInvestigacion": "Estructuras",
+            "tipoInvestigacion": "Teorica",
+            "categoria": "II",
+            "importe": 25000
+        }
+    }
+]

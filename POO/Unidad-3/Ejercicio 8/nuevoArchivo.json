@@ -1,0 +1,123 @@
+[
+	{
+		"__class__": "DocenteInvestigador",
+		"__atributos__": {
+			"cuil": "2192921",
+			"apellido": "Elizondo",
+			"nombre": "Ramiro",
+			"sueldoB": 200112.0,
+			"antiguedad": 4,
+			"carrera": "LSI",
+			"cargo": "Simple",
+			"catedra": "hola",
+			"areaInvestigacion": "Computacional",
+			"tipoInvestigacion": "Cientifico",
+			"categoria": "III",
+			"importe": 9022.0
+		}
+	},
+	{
+		"__class__": "Docente",
+		"__atributos__": {
+			"cuil": "20-3454506-8",
+			"apellido": "Perez",
+			"nombre": "Nicolas",
+			"sueldoB": 89000.0,
+			"antiguedad": 3,
+			"carrera": "LCC",
+			"cargo": "Semiexclusivo",
+			"catedra": "Sistemas de Informacion"
+		}
+	},
+	{
+		"__class__": "Investigacion",
+		"__atributos__": {
+			"cuil": "15-324235-5",
+			"apellido": "Dominguez",
+			"nombre": "Juan",
+			"sueldoB": 120000.0,
+			"antiguedad": 2,
+			"areaInvestigacion": "Computacional",
+			"tipoInvestigacion": "Cientifica"
+		}
+	},
+	{
+		"__class__": "PersonalApoyo",
+		"__atributos__": {
+			"cuil": "12-456543-4",
+			"apellido": "Castro",
+			"nombre": "Maria",
+			"sueldoB": 140000.0,
+			"antiguedad": 2,
+			"categoria": 12
+		}
+	},
+	{
+		"__class__": "DocenteInvestigador",
+		"__atributos__": {
+			"cuil": "18-3446706-8",
+			"apellido": "Zarate",
+			"nombre": "Marcos",
+			"sueldoB": 89000.0,
+			"antiguedad": 3,
+			"carrera": "LCC",
+			"cargo": "Exclusivo",
+			"catedra": "EyFCI",
+			"areaInvestigacion": "Estructuras",
+			"tipoInvestigacion": "Teorica",
+			"categoria": "III",
+			"importe": 25000.0
+		}
+	},
+	{
+		"__class__": "DocenteInvestigador",
+		"__atributos__": {
+			"cuil": "18-3446706-8",
+			"apellido": "Lopez",
+			"nombre": "Agustin",
+			"sueldoB": 89000.0,
+			"antiguedad": 3,
+			"carrera": "LCC",
+			"cargo": "Semiexclusivo",
+			"catedra": "EyFCI",
+			"areaInvestigacion": "Estructuras",
+			"tipoInvestigacion": "Teorica",
+			"categoria": "IV",
+			"importe": 25000.0
+		}
+	},
+	{
+		"__class__": "DocenteInvestigador",
+		"__atributos__": {
+			"cuil": "18-3446706-8",
+			"apellido": "Ortiz",
+			"nombre": "Zariel",
+			"sueldoB": 89000.0,
+			"antiguedad": 3,
+			"carrera": "LCC",
+			"cargo": "Exclusivo",
+			"catedra": "EyFCI",
+			"areaInvestigacion": "Estructuras",
+			"tipoInvestigacion": "Teorica",
+			"categoria": "II",
+			"importe": 25000.0
+		}
+	},
+	{
+		"__class__": "DocenteInvestigador",
+		"__atributos__": {
+			"cuil": "29212321",
+			"apellido": "Perez",
+			"nombre": "Juan",
+			"sueldoB": 291212.0,
+			"antiguedad": 5,
+			"carrera": "LCC",
+			"cargo": "Semiexclusivo",
+			"catedra": "hola2",
+			"areaInvestigacion": "Electronica",
+			"tipoInvestigacion": "Cuantica",
+			"categoria": "III ",
+			"importe": 21221.0
+		}
+	}
+]
