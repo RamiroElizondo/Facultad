@@ -1,0 +1,6 @@
+com\mycompany\ejercicio2\Ejercicio2.class
+models\Deportista.class
+models\IDeporte.class
+models\Equipo.class
+models\Pareja.class
+com\mycompany\ejercicio2\Gestor.class
