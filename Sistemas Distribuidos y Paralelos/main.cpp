@@ -63,7 +63,7 @@ int main() {
     int resultado[N];
     int opcion;
 
-    printf("Seleccione el metodo de carga de la matriz:\n");
+    printf("Seleccione el método de carga de la matriz:\n");
     printf("1 - Carga manual\n");
     printf("2 - Carga aleatoria\n");
     scanf("%d", &opcion);

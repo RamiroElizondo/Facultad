@@ -34,7 +34,9 @@ class AnalisisExploratorio:
             elif opcion == '3':
                 self.histograma('IMC')
             elif opcion == '4':
-                self.correlacion()
+                columna1 = input("Ingrese el nombre de la primera columna: ")
+                columna2 = input("Ingrese el nombre de la segunda columna: ")
+                self.coef_Correlacion(columna1, columna2)
             elif opcion == '5':
                 print("Saliendo del menú de análisis exploratorio...")
     
@@ -135,4 +137,11 @@ class AnalisisExploratorio:
         sns.heatmap(self.__data[variables_numericas].corr(), annot=True, cmap='coolwarm', fmt='.2f')
         plt.title('Matriz de correlación')
         plt.show()
+
+    def coef_Correlacion(self, columna1, columna2):
+        print("------------------------")
+        print("Coeficiente de correlación de las variables Bodyfat y Weight")
+        # Coeficiente de correlación
+        print('Coeficiente de correlacion: ', self.__data.Conteo_de_Globulos_rojos.corr(self.__data.Nivel_de_Hemoglobina))
+        print("------------------------")
 

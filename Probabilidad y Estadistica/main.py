@@ -12,7 +12,15 @@ def main():
     ruta_csv = "biased_leukemia_dataset.csv"
     data = pd.read_csv(ruta_csv)
     # Crear instancia de la clase AnalisisExploratorio
-
+    variables = [
+            "Edad", 
+            "Conteo_de_Globulos_blancos", 
+            "Conteo_de_Globulos_rojos",
+            "Conteo_de_Plaquetas", 
+            "Nivel_de_Hemoglobina", 
+            "Blastos_de_Médula_Osea", 
+            "IMC"
+            ]
     
     while True:
         print("\n===== MENÚ PRINCIPAL =====")
@@ -30,15 +38,7 @@ def main():
             analisis = AnalisisExploratorio(data)
             analisis.menu()
         if opcion == "4":
-            variables = [
-            "Edad", 
-            "Conteo_de_Globulos_blancos", 
-            "Conteo_de_Globulos_rojos",
-            "Conteo_de_Plaquetas", 
-            "Nivel_de_Hemoglobina", 
-            "Blastos_de_Médula_Osea", 
-            "IMC"
-            ]
+            
             print("\n---- Variables Disponibles ----")
             for i, var in enumerate(variables, start=1):
                 print(f"{i}. {var}")

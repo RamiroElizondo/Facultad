@@ -33,13 +33,14 @@ class RegresionLineal:
         Muestra el menú de opciones para la regresión lineal.
         """
         opcion = ''
-        while opcion != '5':
+        while opcion != '7':
             print("\n===== MENÚ REGRESIÓN LINEAL =====")
             print("1. Estimar parámetros (mínimos cuadrados)")
             print("2. Entrenar modelo (scikit-learn)")
             print("3. Graficar regresión")
             print("4. Analizar residuales")
             print("5. Mostrar resultados")
+            print("6. Tranformacion de X")
             print("6. Salir")
             
             opcion = input("Seleccione una opción (6 para salir): ")
@@ -54,13 +55,16 @@ class RegresionLineal:
             elif opcion == '5':
                 self.mostrar_resultados()
             elif opcion == '6':
+                columna = input("Ingrese el nombre de la columna: ")
+                self.tranformacionX(columna)
+            elif opcion == '7':
                 print("Saliendo del menú de regresión lineal...")
 
     def estimar_parametros(self):
         """
         Calcula los coeficientes de regresión (mínimos cuadrados).
         """
-        X = self.datos[self.variable_x].values
+        X = self.datos[self.variable_x].values*1000000
         y = self.datos[self.variable_y].values
         
         # Cálculo de parámetros usando fórmulas de mínimos cuadrados
@@ -121,3 +125,10 @@ class RegresionLineal:
         print(f"Intercepto (α): {self.modelo.intercept_:.4f}")
         print(f"Coeficiente de determinación (R²): {self.r2:.4f}")
         print(f"Error cuadrático medio (MSE): {self.mse:.4f}")
+
+    def tranformacionX(self,columna):
+        datos = self.datos[columna].dropna()
+        datos = datos*1000000 #Por que esta en 
+        print(datos)
+    def transformacionY(self,columna):
+        pass
