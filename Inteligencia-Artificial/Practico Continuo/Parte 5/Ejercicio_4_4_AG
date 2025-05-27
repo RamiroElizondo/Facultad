@@ -1,0 +1,267 @@
+import random
+import time
+import matplotlib.pyplot as plt
+
+class AlgoritmoGeneticoMochila:
+    def __init__(self, pesos, valores, peso_maximo, tam_poblacion=50, prob_cruce=0.8, 
+                 prob_mutacion=0.1, num_generaciones=100):
+        """
+        Inicializa el algoritmo genético para el problema de la mochila
+        
+        Parámetros:
+        pesos: lista de pesos de los objetos
+        valores: lista de valores de los objetos
+        peso_maximo: capacidad máxima de la mochila
+        tam_poblacion: tamaño de la población
+        prob_cruce: probabilidad de cruce
+        prob_mutacion: probabilidad de mutación
+        num_generaciones: número máximo de generaciones
+        """
+        self.pesos = pesos
+        self.valores = valores
+        self.peso_maximo = peso_maximo
+        self.num_objetos = len(pesos)
+        self.tam_poblacion = tam_poblacion
+        self.prob_cruce = prob_cruce
+        self.prob_mutacion = prob_mutacion
+        self.num_generaciones = num_generaciones
+        
+        # Para almacenar resultados
+        self.mejor_individuo = None
+        self.mejor_aptitud = 0
+        self.historico_aptitud = []
+        self.poblacion_actual = []
+    
+    def generar_poblacion_inicial(self):
+        #Genera una población inicial de individuos aleatorios
+        poblacion = []
+        for _ in range(self.tam_poblacion):
+            # Crear un individuo aleatorio con bits 0 o 1
+            individuo = [random.randint(0, 1) for _ in range(self.num_objetos)]
+            poblacion.append(individuo)
+        return poblacion
+    
+    def evaluar_aptitud(self, individuo):
+        #Evalúa la aptitud (fitness) de un individuo
+        peso_total = sum(self.pesos[i] for i in range(self.num_objetos) if individuo[i] == 1)
+        
+        # Si excede el peso máximo, aplicar penalización
+        if peso_total > self.peso_maximo:
+            return 0  # Solución no factible
+        
+        # Calcular el valor total
+        valor_total = sum(self.valores[i] for i in range(self.num_objetos) if individuo[i] == 1)
+        return valor_total
+    
+    def seleccion_elitista(self, poblacion, aptitudes):
+        """
+        Realiza la selección elitista, ordenando la población por aptitud
+        y seleccionando los mejores individuos
+        """
+        # Crear pares (aptitud, individuo) y ordenarlos de mayor a menor aptitud
+        pares = list(zip(aptitudes, poblacion))
+        pares.sort(reverse=True, key=lambda x: x[0])
+        
+        # Extraer los individuos ordenados
+        poblacion_ordenada = [individuo for _, individuo in pares]
+        
+        # Devolver la población ordenada por aptitud
+        return poblacion_ordenada
+    
+    def cruce_un_punto(self, padre1, padre2):
+        #Realiza el cruce de un punto entre dos padres, One Point Crossover
+        if random.random() > self.prob_cruce:
+            return padre1.copy(), padre2.copy()
+        
+        punto_cruce = random.randint(1, len(padre1) - 1)
+        hijo1 = padre1[:punto_cruce] + padre2[punto_cruce:]
+        hijo2 = padre2[:punto_cruce] + padre1[punto_cruce:]
+        
+        return hijo1, hijo2
+    
+    def mutacion(self, individuo):
+        #Aplica mutación a un individuo, Flip Bit Mutation
+        for i in range(len(individuo)):
+            if random.random() < self.prob_mutacion:
+                individuo[i] = 1 - individuo[i]  # Invertir bit (0->1, 1->0)
+        return individuo
+    
+    def evolucionar(self):
+        #Ejecuta el algoritmo genético
+        # Generar población inicial
+        poblacion = self.generar_poblacion_inicial()
+        self.poblacion_actual = poblacion
+        
+        # Para visualización: mostrar población inicial
+        print("\n---- Población Inicial ----")
+        aptitudes_iniciales = [self.evaluar_aptitud(individuo) for individuo in poblacion]
+        for i in range(min(4, len(poblacion))):  # Mostrar solo los primeros 4
+            print(f"Individuo {i+1}: {poblacion[i]}, Aptitud: {aptitudes_iniciales[i]}")
+        
+        # Evolución a través de generaciones
+        for generacion in range(self.num_generaciones):
+            # Evaluar aptitud de cada individuo
+            aptitudes = [self.evaluar_aptitud(individuo) for individuo in poblacion]
+            
+            # Encontrar el mejor individuo
+            mejor_idx = aptitudes.index(max(aptitudes))
+            if aptitudes[mejor_idx] > self.mejor_aptitud:
+                self.mejor_individuo = poblacion[mejor_idx].copy()
+                self.mejor_aptitud = aptitudes[mejor_idx]
+            
+            # Almacenar para histórico
+            self.historico_aptitud.append(max(aptitudes))
+            
+            # Mostrar progreso
+            if generacion % 10 == 0:
+                print(f"Generación {generacion}: Mejor aptitud = {max(aptitudes)}")
+            
+            # Aplicar selección elitista (ordena la población por aptitud)
+            poblacion_ordenada = self.seleccion_elitista(poblacion, aptitudes)
+            
+            # Crear nueva población
+            nueva_poblacion = []
+            
+            # Los mejores individuos pasan directamente a la siguiente generación
+            num_elites = max(2, int(self.tam_poblacion * 0.1))  # 10% de elitismo
+            nueva_poblacion.extend(poblacion_ordenada[:num_elites])
+            
+            # Completar la población con descendientes de los mejores individuos
+            while len(nueva_poblacion) < self.tam_poblacion:
+                # Seleccionar padres (probabilidad proporcional a su posición en la lista ordenada)
+                # Damos más probabilidad a los mejores individuos
+                indices = list(range(len(poblacion_ordenada)))
+                pesos_seleccion = [1/(i+1) for i in indices]  # Mayor peso a los primeros índices
+                
+                idx1, idx2 = random.choices(indices, weights=pesos_seleccion, k=2)
+                padre1, padre2 = poblacion_ordenada[idx1], poblacion_ordenada[idx2]
+                
+                # Cruzamiento
+                hijo1, hijo2 = self.cruce_un_punto(padre1, padre2)
+                
+                # Mutación
+                hijo1 = self.mutacion(hijo1)
+                hijo2 = self.mutacion(hijo2)
+                
+                # Añadir a nueva población
+                nueva_poblacion.append(hijo1)
+                if len(nueva_poblacion) < self.tam_poblacion:
+                    nueva_poblacion.append(hijo2)
+            
+            # Actualizar población
+            poblacion = nueva_poblacion
+            self.poblacion_actual = poblacion
+        
+        # Evaluar última generación
+        aptitudes_finales = [self.evaluar_aptitud(individuo) for individuo in poblacion]
+        mejor_idx = aptitudes_finales.index(max(aptitudes_finales))
+        
+        if aptitudes_finales[mejor_idx] > self.mejor_aptitud:
+            self.mejor_individuo = poblacion[mejor_idx].copy()
+            self.mejor_aptitud = aptitudes_finales[mejor_idx]
+        
+        return self.mejor_individuo, self.mejor_aptitud
+    
+    def mostrar_resultados(self):
+        #Muestra los resultados del algoritmo genético
+        if self.mejor_individuo is None:
+            print("Todavía no se ha ejecutado el algoritmo.")
+            return
+        
+        print("\n---- Resultados finales ----")
+        print(f"Mejor solución encontrada: {self.mejor_individuo}")
+        print(f"Valor total: {self.mejor_aptitud}")
+        
+        objetos_seleccionados = [i+1 for i in range(self.num_objetos) if self.mejor_individuo[i] == 1]
+        peso_total = sum(self.pesos[i] for i in range(self.num_objetos) if self.mejor_individuo[i] == 1)
+        
+        print(f"Objetos seleccionados: {objetos_seleccionados}")
+        print(f"Peso total: {peso_total}/{self.peso_maximo}")
+        
+        print("\nDetalle de objetos seleccionados:")
+        print("Objeto | Peso | Valor")
+        print("-"*20)
+        for i in range(self.num_objetos):
+            if self.mejor_individuo[i] == 1:
+                print(f"{i+1:6d} | {self.pesos[i]:4d} | {self.valores[i]:5d}")
+    
+    def graficar_evolucion(self):
+        #"Grafica la evolución de la aptitud a lo largo de las generaciones
+        plt.figure(figsize=(10, 6))
+        plt.plot(range(len(self.historico_aptitud)), self.historico_aptitud, marker='o', linestyle='-')
+        plt.title('Evolución de la aptitud')
+        plt.xlabel('Generación')
+        plt.ylabel('Mejor aptitud')
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+    
+    def mostrar_poblacion_inicial(self, num_mostrar=4):
+        #Muestra los primeros individuos de la población inicial con su aptitud
+        if not self.poblacion_actual:
+            print("La población inicial aún no se ha generado.")
+            return
+            
+        print("\n---- Visualización de la población inicial ----")
+        poblacion_inicial = self.generar_poblacion_inicial()
+        
+        for i in range(min(num_mostrar, len(poblacion_inicial))):
+            individuo = poblacion_inicial[i]
+            aptitud = self.evaluar_aptitud(individuo)
+            print(f"Individuo {i+1}: {individuo}, Aptitud: {aptitud}")
+
+
+def main():
+    # Permitir ingresar datos desde teclado
+    usar_predeterminados = input("¿Usar datos predeterminados? (s/n): ").lower() == 's'
+    
+    if usar_predeterminados:
+        pesos = [4, 2, 3, 1, 2, 5, 3]
+        valores = [10, 4, 7, 1, 2, 8, 6]
+        peso_maximo = 15
+    else:
+        num_objetos = int(input("Ingrese el número de objetos: "))
+        pesos = []
+        valores = []
+        print("Ingrese pares (peso, valor) para cada objeto:")
+        for i in range(num_objetos):
+            p, v = map(int, input(f"Objeto {i+1} (peso valor): ").split())
+            pesos.append(p)
+            valores.append(v)
+        
+        peso_maximo = int(input("Ingrese el peso máximo de la mochila: "))
+    
+    # Configuración del algoritmo genético
+    tam_poblacion = int(input("Ingrese el tamaño de la población (recomendado: 50): ") or "50")
+    num_generaciones = int(input("Ingrese el número de generaciones (recomendado: 100): ") or "100")
+    prob_cruce = float(input("Ingrese la probabilidad de cruce (0-1, recomendado: 0.8): ") or "0.8")
+    prob_mutacion = float(input("Ingrese la probabilidad de mutación (0-1, recomendado: 0.1): ") or "0.1")
+    
+    # Crear y ejecutar el algoritmo genético
+    ag = AlgoritmoGeneticoMochila(
+        pesos, valores, peso_maximo, 
+        tam_poblacion, prob_cruce, prob_mutacion, num_generaciones
+    )
+    
+    # Mostrar población inicial con aptitudes
+    ag.mostrar_poblacion_inicial(4)
+    
+    # Ejecutar el algoritmo
+    tiempo_inicio = time.time()
+    ag.evolucionar()
+    tiempo_fin = time.time()
+    
+    # Mostrar resultados
+    ag.mostrar_resultados()
+    print(f"\nTiempo de ejecución: {tiempo_fin - tiempo_inicio:.4f} segundos")
+    
+    # Graficar evolución
+    try:
+        ag.graficar_evolucion()
+    except Exception as e:
+        print(f"No se pudo generar el gráfico: {e}")
+        print("Puede ser necesario instalar matplotlib o ejecutar en un entorno que soporte gráficos.")
+
+
+if __name__ == "__main__":
+    main()

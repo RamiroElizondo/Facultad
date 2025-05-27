@@ -1,0 +1,125 @@
+# Project: galib
+# Makefile created by Embarcadero Dev-C++ 6.3
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = galib.o ../galib247/galib247/ga/GA2DBinStrGenome.o ../galib247/galib247/ga/GA3DBinStrGenome.o ../galib247/galib247/ga/GABaseGA.o ../galib247/galib247/ga/gabincvt.o ../galib247/galib247/ga/GADemeGA.o ../galib247/galib247/ga/GAList.o ../galib247/galib247/ga/GAListGenome.o ../galib247/galib247/ga/GAParameter.o ../galib247/galib247/ga/GAPopulation.o ../galib247/galib247/ga/garandom.o ../galib247/galib247/ga/GARealGenome.o ../galib247/galib247/ga/GASelector.o ../galib247/galib247/ga/GASStateGA.o ../galib247/galib247/ga/GATreeGenome.o ../galib247/galib247/ga/GA1DArrayGenome.o ../galib247/galib247/ga/GA1DBinStrGenome.o ../galib247/galib247/ga/GA2DArrayGenome.o ../galib247/galib247/ga/GA3DArrayGenome.o ../galib247/galib247/ga/GAAllele.o ../galib247/galib247/ga/GABin2DecGenome.o ../galib247/galib247/ga/GABinStr.o ../galib247/galib247/ga/GADCrowdingGA.o ../galib247/galib247/ga/gaerror.o ../galib247/galib247/ga/GAGenome.o ../galib247/galib247/ga/GAIncGA.o ../galib247/galib247/ga/GAListBASE.o ../galib247/galib247/ga/GAScaling.o ../galib247/galib247/ga/GASimpleGA.o ../galib247/galib247/ga/GAStatistics.o ../galib247/galib247/ga/GAStringGenome.o ../galib247/galib247/ga/GATree.o ../galib247/galib247/ga/GATreeBASE.o
+LINKOBJ  = galib.o ../galib247/galib247/ga/GA2DBinStrGenome.o ../galib247/galib247/ga/GA3DBinStrGenome.o ../galib247/galib247/ga/GABaseGA.o ../galib247/galib247/ga/gabincvt.o ../galib247/galib247/ga/GADemeGA.o ../galib247/galib247/ga/GAList.o ../galib247/galib247/ga/GAListGenome.o ../galib247/galib247/ga/GAParameter.o ../galib247/galib247/ga/GAPopulation.o ../galib247/galib247/ga/garandom.o ../galib247/galib247/ga/GARealGenome.o ../galib247/galib247/ga/GASelector.o ../galib247/galib247/ga/GASStateGA.o ../galib247/galib247/ga/GATreeGenome.o ../galib247/galib247/ga/GA1DArrayGenome.o ../galib247/galib247/ga/GA1DBinStrGenome.o ../galib247/galib247/ga/GA2DArrayGenome.o ../galib247/galib247/ga/GA3DArrayGenome.o ../galib247/galib247/ga/GAAllele.o ../galib247/galib247/ga/GABin2DecGenome.o ../galib247/galib247/ga/GABinStr.o ../galib247/galib247/ga/GADCrowdingGA.o ../galib247/galib247/ga/gaerror.o ../galib247/galib247/ga/GAGenome.o ../galib247/galib247/ga/GAIncGA.o ../galib247/galib247/ga/GAListBASE.o ../galib247/galib247/ga/GAScaling.o ../galib247/galib247/ga/GASimpleGA.o ../galib247/galib247/ga/GAStatistics.o ../galib247/galib247/ga/GAStringGenome.o ../galib247/galib247/ga/GATree.o ../galib247/galib247/ga/GATreeBASE.o
+LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -L"C:/Users/Ramiro/OneDrive/Documentos/GitHub/Facultad/Inteligencia-Artificial/libreriaGalib/galib247"
+INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+BIN      = galib.a
+CXXFLAGS = $(CXXINCS) -fpermissive
+CFLAGS   = $(INCS) 
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${DEL} $(OBJ) $(BIN)
+
+$(BIN): $(LINKOBJ)
+	ar r $(BIN) $(LINKOBJ)
+	ranlib $(BIN)
+
+galib.o: galib.cpp
+	$(CPP) -c galib.cpp -o galib.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA2DBinStrGenome.o: ../galib247/galib247/ga/GA2DBinStrGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA2DBinStrGenome.C -o ../galib247/galib247/ga/GA2DBinStrGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA3DBinStrGenome.o: ../galib247/galib247/ga/GA3DBinStrGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA3DBinStrGenome.C -o ../galib247/galib247/ga/GA3DBinStrGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GABaseGA.o: ../galib247/galib247/ga/GABaseGA.C
+	$(CPP) -c ../galib247/galib247/ga/GABaseGA.C -o ../galib247/galib247/ga/GABaseGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/gabincvt.o: ../galib247/galib247/ga/gabincvt.C
+	$(CPP) -c ../galib247/galib247/ga/gabincvt.C -o ../galib247/galib247/ga/gabincvt.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GADemeGA.o: ../galib247/galib247/ga/GADemeGA.C
+	$(CPP) -c ../galib247/galib247/ga/GADemeGA.C -o ../galib247/galib247/ga/GADemeGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAList.o: ../galib247/galib247/ga/GAList.C
+	$(CPP) -c ../galib247/galib247/ga/GAList.C -o ../galib247/galib247/ga/GAList.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAListGenome.o: ../galib247/galib247/ga/GAListGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GAListGenome.C -o ../galib247/galib247/ga/GAListGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAParameter.o: ../galib247/galib247/ga/GAParameter.C
+	$(CPP) -c ../galib247/galib247/ga/GAParameter.C -o ../galib247/galib247/ga/GAParameter.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAPopulation.o: ../galib247/galib247/ga/GAPopulation.C
+	$(CPP) -c ../galib247/galib247/ga/GAPopulation.C -o ../galib247/galib247/ga/GAPopulation.o $(CXXFLAGS)
+
+../galib247/galib247/ga/garandom.o: ../galib247/galib247/ga/garandom.C
+	$(CPP) -c ../galib247/galib247/ga/garandom.C -o ../galib247/galib247/ga/garandom.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GARealGenome.o: ../galib247/galib247/ga/GARealGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GARealGenome.C -o ../galib247/galib247/ga/GARealGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GASelector.o: ../galib247/galib247/ga/GASelector.C
+	$(CPP) -c ../galib247/galib247/ga/GASelector.C -o ../galib247/galib247/ga/GASelector.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GASStateGA.o: ../galib247/galib247/ga/GASStateGA.C
+	$(CPP) -c ../galib247/galib247/ga/GASStateGA.C -o ../galib247/galib247/ga/GASStateGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GATreeGenome.o: ../galib247/galib247/ga/GATreeGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GATreeGenome.C -o ../galib247/galib247/ga/GATreeGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA1DArrayGenome.o: ../galib247/galib247/ga/GA1DArrayGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA1DArrayGenome.C -o ../galib247/galib247/ga/GA1DArrayGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA1DBinStrGenome.o: ../galib247/galib247/ga/GA1DBinStrGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA1DBinStrGenome.C -o ../galib247/galib247/ga/GA1DBinStrGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA2DArrayGenome.o: ../galib247/galib247/ga/GA2DArrayGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA2DArrayGenome.C -o ../galib247/galib247/ga/GA2DArrayGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GA3DArrayGenome.o: ../galib247/galib247/ga/GA3DArrayGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GA3DArrayGenome.C -o ../galib247/galib247/ga/GA3DArrayGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAAllele.o: ../galib247/galib247/ga/GAAllele.C
+	$(CPP) -c ../galib247/galib247/ga/GAAllele.C -o ../galib247/galib247/ga/GAAllele.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GABin2DecGenome.o: ../galib247/galib247/ga/GABin2DecGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GABin2DecGenome.C -o ../galib247/galib247/ga/GABin2DecGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GABinStr.o: ../galib247/galib247/ga/GABinStr.C
+	$(CPP) -c ../galib247/galib247/ga/GABinStr.C -o ../galib247/galib247/ga/GABinStr.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GADCrowdingGA.o: ../galib247/galib247/ga/GADCrowdingGA.C
+	$(CPP) -c ../galib247/galib247/ga/GADCrowdingGA.C -o ../galib247/galib247/ga/GADCrowdingGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/gaerror.o: ../galib247/galib247/ga/gaerror.C
+	$(CPP) -c ../galib247/galib247/ga/gaerror.C -o ../galib247/galib247/ga/gaerror.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAGenome.o: ../galib247/galib247/ga/GAGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GAGenome.C -o ../galib247/galib247/ga/GAGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAIncGA.o: ../galib247/galib247/ga/GAIncGA.C
+	$(CPP) -c ../galib247/galib247/ga/GAIncGA.C -o ../galib247/galib247/ga/GAIncGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAListBASE.o: ../galib247/galib247/ga/GAListBASE.C
+	$(CPP) -c ../galib247/galib247/ga/GAListBASE.C -o ../galib247/galib247/ga/GAListBASE.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAScaling.o: ../galib247/galib247/ga/GAScaling.C
+	$(CPP) -c ../galib247/galib247/ga/GAScaling.C -o ../galib247/galib247/ga/GAScaling.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GASimpleGA.o: ../galib247/galib247/ga/GASimpleGA.C
+	$(CPP) -c ../galib247/galib247/ga/GASimpleGA.C -o ../galib247/galib247/ga/GASimpleGA.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAStatistics.o: ../galib247/galib247/ga/GAStatistics.C
+	$(CPP) -c ../galib247/galib247/ga/GAStatistics.C -o ../galib247/galib247/ga/GAStatistics.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GAStringGenome.o: ../galib247/galib247/ga/GAStringGenome.C
+	$(CPP) -c ../galib247/galib247/ga/GAStringGenome.C -o ../galib247/galib247/ga/GAStringGenome.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GATree.o: ../galib247/galib247/ga/GATree.C
+	$(CPP) -c ../galib247/galib247/ga/GATree.C -o ../galib247/galib247/ga/GATree.o $(CXXFLAGS)
+
+../galib247/galib247/ga/GATreeBASE.o: ../galib247/galib247/ga/GATreeBASE.C
+	$(CPP) -c ../galib247/galib247/ga/GATreeBASE.C -o ../galib247/galib247/ga/GATreeBASE.o $(CXXFLAGS)

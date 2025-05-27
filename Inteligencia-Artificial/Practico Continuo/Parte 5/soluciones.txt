@@ -1,0 +1,87 @@
+Población Inicial:
+[1, 0, 0, 0, 1, 1, 1] -> Valor: 26
+[1, 1, 1, 1, 1, 0, 0] -> Valor: 24
+[0, 1, 0, 0, 0, 0, 0] -> Valor: 4
+[0, 1, 0, 0, 1, 0, 0] -> Valor: 6
+============
+Iteración 1:
+Solución actual: [1, 0, 0, 1, 0, 1, 1] -> Valor: 25
+Mejor hasta ahora: [1, 0, 0, 1, 0, 1, 1] -> Valor: 25
+============
+Iteración 2:
+Solución actual: [1, 1, 0, 1, 0, 1, 1] -> Valor: 29
+Mejor hasta ahora: [1, 1, 0, 1, 0, 1, 1] -> Valor: 29
+============
+Iteración 3:
+Solución actual: [1, 1, 0, 0, 0, 1, 1] -> Valor: 28
+Mejor hasta ahora: [1, 1, 0, 1, 0, 1, 1] -> Valor: 29
+============
+Iteración 4:
+Solución actual: [1, 0, 0, 0, 0, 1, 1] -> Valor: 24
+Mejor hasta ahora: [1, 1, 0, 1, 0, 1, 1] -> Valor: 29
+============
+Iteración 5:
+Solución actual: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 6:
+Solución actual: [1, 0, 1, 0, 0, 1, 0] -> Valor: 25
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 7:
+Solución actual: [1, 1, 1, 0, 0, 1, 0] -> Valor: 29
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 8:
+Solución actual: [1, 1, 1, 1, 0, 1, 0] -> Valor: 30
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 9:
+Solución actual: [1, 0, 1, 1, 0, 1, 0] -> Valor: 26
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 10:
+Solución actual: [1, 0, 1, 1, 1, 1, 0] -> Valor: 28
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 11:
+Solución actual: [1, 0, 1, 0, 1, 1, 0] -> Valor: 27
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 12:
+Solución actual: [1, 0, 1, 0, 0, 1, 0] -> Valor: 25
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 13:
+Solución actual: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 14:
+Solución actual: [1, 0, 0, 0, 0, 1, 1] -> Valor: 24
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 15:
+Solución actual: [1, 1, 0, 0, 0, 1, 1] -> Valor: 28
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 16:
+Solución actual: [1, 1, 0, 1, 0, 1, 1] -> Valor: 29
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 17:
+Solución actual: [1, 0, 0, 1, 0, 1, 1] -> Valor: 25
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 18:
+Solución actual: [1, 0, 0, 1, 1, 1, 1] -> Valor: 27
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 19:
+Solución actual: [1, 0, 0, 0, 1, 1, 1] -> Valor: 26
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+Iteración 20:
+Solución actual: [1, 0, 0, 0, 0, 1, 1] -> Valor: 24
+Mejor hasta ahora: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
+============
+>> Mejor Solución Encontrada: [1, 0, 1, 0, 0, 1, 1] -> Valor: 31
