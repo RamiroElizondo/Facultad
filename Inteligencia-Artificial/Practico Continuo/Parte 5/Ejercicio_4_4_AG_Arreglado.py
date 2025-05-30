@@ -26,46 +26,13 @@ class AlgoritmoGeneticoMochila:
         print(f"Método de aptitud: {metodo_aptitud}")
     
     def generar_poblacion_inicial(self):
-        """Genera población inicial con mayor diversidad"""
-        poblacion = []
-        
-        # 20% completamente aleatorio
-        for _ in range(int(self.tam_poblacion * 0.2)):
-            individuo = [random.randint(0, 1) for _ in range(self.num_objetos)]
-            poblacion.append(individuo)
-        
-        # 30% basado en ratio valor/peso (greedy)
-        ratios = [(self.valores[i]/self.pesos[i], i) for i in range(self.num_objetos)]
-        ratios.sort(reverse=True)
-        
-        for _ in range(int(self.tam_poblacion * 0.3)):
-            individuo = [0] * self.num_objetos
-            peso_actual = 0
-            indices_mezclados = [idx for _, idx in ratios]
-            random.shuffle(indices_mezclados)  # Añadir aleatoriedad
-            
-            for idx in indices_mezclados:
-                if peso_actual + self.pesos[idx] <= self.peso_maximo:
-                    if random.random() < 0.8:  # 80% probabilidad de tomar objeto bueno
-                        individuo[idx] = 1
-                        peso_actual += self.pesos[idx]
-            poblacion.append(individuo)
-        
-        # 50% restante completamente aleatorio
-        while len(poblacion) < self.tam_poblacion:
-            individuo = [random.randint(0, 1) for _ in range(self.num_objetos)]
-            poblacion.append(individuo)
-        
-        return poblacion
-    
-    """def generar_poblacion_inicial(self):
         #Genera una población inicial de individuos aleatorios
         poblacion = []
         for _ in range(self.tam_poblacion):
             # Crear un individuo aleatorio con bits 0 o 1
             individuo = [random.randint(0, 1) for _ in range(self.num_objetos)]
             poblacion.append(individuo)
-        return poblacion"""
+        return poblacion
 
     def evaluar_aptitud(self, individuo):
         """Evalúa la aptitud de un individuo"""
