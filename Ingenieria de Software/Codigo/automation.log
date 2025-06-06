@@ -1,0 +1,26 @@
+2025-06-04 13:26:01,183 - INFO - Driver iniciado correctamente
+2025-06-04 13:26:01,377 - INFO - Contextos disponibles: ['NATIVE_APP']
+2025-06-04 13:26:01,377 - WARNING - Contexto WEBVIEW_chrome no disponible
+2025-06-04 13:26:01,378 - INFO - === INICIANDO PRUEBA COMPLETA ===
+2025-06-04 13:26:01,378 - INFO - Iniciando aplicación y manejando diálogos...
+2025-06-04 13:26:05,145 - INFO - Diálogo cerrado: //*[@text='Usar sin una cuenta']
+2025-06-04 13:26:08,692 - INFO - Diálogo cerrado: //*[@text='Más']
+2025-06-04 13:26:11,322 - INFO - Diálogo cerrado: //*[@text='Entendido']
+2025-06-04 13:26:15,031 - INFO - Navegando a: https://automationexercise.com/
+2025-06-04 13:26:36,200 - ERROR - Timeout: La página no cargó en el tiempo esperado
+2025-06-04 13:26:48,946 - INFO - Aplicación cerrada correctamente
+2025-06-04 13:30:30,909 - INFO - Driver iniciado correctamente
+2025-06-04 13:30:30,991 - INFO - Contextos disponibles: ['NATIVE_APP']
+2025-06-04 13:30:30,992 - WARNING - Contexto WEBVIEW_chrome no disponible
+2025-06-04 13:30:30,992 - INFO - === INICIANDO PRUEBA COMPLETA ===
+2025-06-04 13:30:30,992 - INFO - Iniciando aplicación y manejando diálogos...
+2025-06-04 13:30:43,646 - INFO - Navegando a: https://automationexercise.com/
+2025-06-04 13:31:04,712 - ERROR - Timeout: La página no cargó en el tiempo esperado
+2025-06-04 13:31:17,526 - INFO - Aplicación cerrada correctamente
+2025-06-04 20:09:22,027 - INFO - Driver iniciado correctamente
+2025-06-04 20:09:22,237 - INFO - Contextos disponibles: ['NATIVE_APP']
+2025-06-04 20:09:22,238 - WARNING - Contexto WEBVIEW_chrome no disponible
+2025-06-04 20:09:22,238 - INFO - === INICIANDO PRUEBA COMPLETA ===
+2025-06-04 20:09:22,238 - INFO - Iniciando aplicación y manejando diálogos...
+2025-06-04 20:09:25,801 - INFO - Diálogo cerrado: //*[@text='Aceptar']
+2025-06-04 20:09:28,285 - INFO - Navegando a: https://automationexercise.com/

@@ -1,0 +1,19 @@
+Caso de prueba 1: Registrar usuario
+1. Iniciar el navegador
+2. Navegue a la URL 'http://automationexercise.com'
+3. Verifique que la página de inicio sea visible correctamente
+4. Haga clic en el botón "Registrarse / Iniciar sesión".
+5. Verifique que la opción "¡Registro de nuevo usuario!" esté visible.
+6. Ingrese su nombre y dirección de correo electrónico
+7. Haga clic en el botón "Registrarse".
+8. Verifique que 'INGRESAR INFORMACIÓN DE LA CUENTA' esté visible
+9. Complete los datos: Título, Nombre, Correo electrónico, Contraseña, Fecha de nacimiento
+10. Seleccione la casilla de verificación '¡Suscríbase a nuestro boletín informativo!'
+11. Seleccione la casilla de verificación '¡Reciba ofertas especiales de nuestros socios!'
+12. Complete los datos: Nombre, Apellido, Empresa, Dirección, Dirección2, País, Estado, Ciudad, Código postal, Número de teléfono móvil
+13. Haga clic en el botón "Crear cuenta"
+14. Verifique que '¡CUENTA CREADA!' esté visible
+15. Haga clic en el botón "Continuar".
+16. Verifique que la opción "Iniciar sesión como nombre de usuario" esté visible
+17. Haga clic en el botón "Eliminar cuenta".
+18. Verifique que la opción "¡CUENTA ELIMINADA!" esté visible y haga clic en el botón "Continuar"
