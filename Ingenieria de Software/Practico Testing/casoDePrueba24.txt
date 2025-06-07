@@ -1,0 +1,23 @@
+1. Iniciar el navegador
+2. Navegue a la URL 'http://automationexercise.com'
+3. Verifique que la página de inicio sea visible correctamente
+4. Añadir productos al carrito
+5. Haga clic en el botón "Carrito"
+6. Verifique que se muestre la página del carrito
+7. Haga clic en Proceder al pago
+8. Haga clic en el botón «Registrarse / Iniciar sesión»
+9. Complete todos los datos en Registrarse y crear cuenta
+10. Verifique "¡CUENTA CREADA!" y haga clic en el botón "Continuar".
+11. Verifique 'Iniciar sesión como nombre de usuario' en la parte superior
+12. Haga clic en el botón "Carrito"
+13. Haga clic en el botón "Proceder al pago".
+14. Verifique los detalles de la dirección y revise su pedido
+15. Ingrese una descripción en el área de texto del comentario y haga clic en "Realizar pedido".
+16. Ingrese los detalles del pago: Nombre en la tarjeta, Número de tarjeta, CVC, Fecha de vencimiento
+17. Haga clic en el botón «Pagar y confirmar pedido».
+18. Verifique el mensaje de éxito '¡Su pedido se ha realizado correctamente!'
+19. Haga clic en el botón “Descargar factura” y verifique que la factura se haya descargado correctamente.
+20. Haga clic en el botón "Continuar".
+21. Haga clic en el botón "Eliminar cuenta".
+22. Verifique "¡CUENTA ELIMINADA!" y haga clic en el botón "Continuar".
+
