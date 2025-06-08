@@ -1,17 +1,19 @@
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException, InvalidSelectorException
+from selenium.common.exceptions import ElementClickInterceptedException, TimeoutException, InvalidSelectorException, WebDriverException
+from selenium.webdriver.support.ui import Select
+import random
 
 import time
 import os
 import unittest
 
 class Automatizar(unittest.TestCase):
-    """Clase para automatizar pruebas en la aplicación Chrome en Android usando Appium"""
     def __init__(self,platform_name="Android", platform_version="12", device_name="a31"):
         self.__driver = None
         self.__options = UiAutomator2Options()
@@ -24,71 +26,77 @@ class Automatizar(unittest.TestCase):
         self.__webview_context = None
     
     def configurarChrome(self):
-        """Busca ChromeDriver en ubicaciones comunes"""
         path = str(os.path.join(os.path.dirname(__file__), "chromedriver.exe"))
-        
         if os.path.exists(path):
             abs_path = os.path.abspath(path)
-            print(f"✅ ChromeDriver encontrado: {abs_path}")
-        
-        if abs_path:
             self.__options.set_capability("chromedriverExecutable", abs_path)
             print(f"✅ ChromeDriver configurado: {abs_path}")
         else:
-            print("⚠️  ChromeDriver no encontrado localmente")
-            print("🔄 Intentando con descarga automática de Appium...")
-            
-            # Configuraciones para descarga automática
+            print("⚠️  ChromeDriver no encontrado localmente. Usando autodownload...")
             self.__options.set_capability("chromedriverAutodownload", True)
             self.__options.set_capability("chromedriverChromeMappingFile", "")
 
     def iniciarDriver(self):
-        """Inicia el driver de Appium con las opciones configuradas"""
         self.configurarChrome()
-        
-        # Configuraciones adicionales para WebView
         self.__options.set_capability("enableWebviewDetailsCollection", True)
         self.__options.set_capability("ensureWebviewsHavePages", True)
         self.__options.set_capability("webviewDevtoolsPort", 9222)
-        
+        self.__options.set_capability("noReset", True)
         print("🚀 Iniciando driver...")
         self.__driver = webdriver.Remote("http://localhost:4723/wd/hub", options=self.__options)
-        
         time.sleep(6)
     
     def manejoDialogos(self):
-        dialogos = [
-            "Usar sin una cuenta",
-            "Más",
-            "Entendido",
-        ]
-
+        dialogos = ["Usar sin una cuenta","Más","Entendido",]
         print("🔄 Manejo de diálogos iniciales de Chrome...")
         for dialog in dialogos:
             try:
                 element = self.__driver.find_element(AppiumBy.XPATH,f'//*[@text="{dialog}"]')
                 element.click()
-                time.sleep(3)
                 print(f"✅ Se hizo click en '{dialog}'")
-            except Exception as e:
-                print(f"⚠️ No se pudo encontrar el diálogo '{dialog}': {e}")
+                time.sleep(3)
+            except Exception:
+                print(f"ℹ️ Diálogo '{dialog}' no presente (omitido)")
                 continue
         
         time.sleep(3)
     
-    def entrarPagina(self,url,wait:WebDriverWait):
+    def getDriver(self):
+        if not self.__driver:
+            raise Exception("❌ El driver aún no fue iniciado. Llamá a iniciarDriver primero.")
+        try:
+            print("🔄 Verificando conexión con el driver...")
+            print('driver',self.__driver)
+            print('holas',self.__driver.current_context)
+            print('Hola',self.__driver.current_url)
+            self.__driver.current_url
+        except WebDriverException as e:
+            raise Exception(f"❌ El driver perdió conexión con el navegador: {e}")
+        return self.__driver
+    
+    def entrarPagina(self,url):
+        wait = WebDriverWait(automatizar.getDriver(), 20)
         print("🌐 Navegando a automationexercise.com...")
+        print(self.getDriver())
         self.__driver.get(url)
         try:
+            time.sleep(7)
             wait.until(EC.presence_of_element_located((AppiumBy.XPATH, "//*[contains(@text, 'Automation')]")))
             print("✅ Página cargada correctamente.")
         except:
             print("⚠️  No se pudo verificar la carga completa de la página.")
+        finally:
+            return self.__driver.page_source
 
-    def cambiarContexto(self,wait:WebDriverWait):
+    def cambiarContexto(self):
+        wait = WebDriverWait(automatizar.getDriver(), 20)
         # Mostrar contextos disponibles
         contexts = self.__driver.contexts
         print(f"📱 Contextos disponibles: {contexts}")
+
+        if len(contexts) == 1 and contexts[0] == "NATIVE_APP":
+            print("⚠️ Solo hay un contexto disponible: NATIVE_APP. No se puede cambiar a WebView.")
+            raise Exception("No hay contexto WebView disponible. Asegúrate de que la aplicación esté configurada correctamente para WebView.")
 
         # Buscar contexto WebView
         for context in contexts:
@@ -100,14 +108,14 @@ class Automatizar(unittest.TestCase):
                 print(f"🔄 Cambiando a contexto: {self.__webview_context}")
                 
                 # Esperar un poco antes del cambio
-                time.sleep(2)
-                
+                time.sleep(3)
+                print("Esperando a que el WebView esté listo...")
                 self.__driver.switch_to.context(self.__webview_context)
                 print("✅ ¡Cambio de contexto exitoso!")
                 
                 # Esperar a que el WebView esté listo
                 wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                time.sleep(4)
+                print("El contexto actual es:", self.__webview_context)
             except InvalidSelectorException as e:
                 error_msg = str(e)
                 print(f"⚠️  Error al cambiar a WebView: {error_msg}")
@@ -129,28 +137,100 @@ class Automatizar(unittest.TestCase):
 
         print("✅ Script completado")
         
-
-    def agregarProducto(self, wait:WebDriverWait):
+    def cerrarIframeAnuncio(self):
+        """Cierra el iframe de anuncio o simula cerrar el contenedor que lo incluye"""
         try:
+            print("🔄 Buscando iframe de anuncio...")
+            print("Contexto actual:", self.__driver.current_context)
+            # Esperar iframes
+            iframes = self.__driver.find_elements(By.TAG_NAME, "iframe")
+            
+            print(f"🔍 {len(iframes)} iframe(s) encontrados")
+
+            for iframe in iframes:
+                iframe_id = iframe.get_attribute("id") or ""
+                src = iframe.get_attribute("src") or ""
+                if "aswift" in iframe_id or "google" in iframe_id or "ads" in src:
+                    try:
+                        self.__driver.execute_script("arguments[0].style.display = 'none';", iframe)
+                        print(f"✅ Iframe ocultado (id: {iframe_id})")
+                    except Exception as ocultar_error:
+                        print(f"⚠️ No se pudo ocultar iframe {iframe_id}: {ocultar_error}")
+
+            # Intentar simular clic en la flecha (íconos de colapso o cierre)
+            posibles_flechas = self.__driver.find_elements(By.CSS_SELECTOR, "[aria-label*='cerrar'], [aria-label*='close'], button, div[role='button']")
+            for flecha in posibles_flechas:
+                try:
+                    label = flecha.get_attribute("aria-label") or ""
+                    if "cerrar" in label.lower() or "close" in label.lower():
+                        flecha.click()
+                        print("✅ Flecha de cierre clickeada")
+                        time.sleep(1)
+                        return True
+                except Exception as e:
+                    print(f"⚠️ No se pudo clickear flecha: {e}")
+                    continue
+
+            return True
+
+        except Exception as e:
+            print(f"❌ Error general al manejar iframes de anuncios: {e}")
+            return False
+
+    def verificarDriver(self):
+        """Verifica si el driver está activo y en el contexto correcto"""
+        try:
+            if not self.__driver:
+                raise Exception("❌ El driver aún no fue iniciado. Llamá a iniciarDriver primero.")
+            print("🔄 Verificando conexión con el driver...")
+            print("Estamos en",self.__driver.current_url)
+            print("✅ Conexión con el driver verificada")
+            print("El contexto actual es:", self.__driver.current_context)
+        except WebDriverException as e:
+            raise Exception(f"❌ El driver perdió conexión con el navegador: {e}")
+
+    def tomarScreenshot(self, filename):
+        """Toma un screenshot del estado actual del driver"""
+        try:
+            screenshot_path = os.path.join(os.path.dirname(__file__), filename)
+            self.__driver.save_screenshot(screenshot_path)
+            print(f"📸 Screenshot guardado: {screenshot_path}")
+        except Exception as e:
+            print(f"❌ Error al tomar screenshot: {e}")
+
+    def agregarProducto(self):
+        try:
+            self.verificarDriver()
+            print("🔄 Buscando productos en la página...")
+            wait = WebDriverWait(automatizar.getDriver(), 30)
+            wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".product-image-wrapper")))
             productos = self.__driver.find_elements(By.CSS_SELECTOR, ".product-image-wrapper")
             print(f"✅ Se encontraron {len(productos)} productos.")
-            nombre_buscado = "Blue Top"
+            nombre_buscado = "Printed Off Shoulder Top - White"
 
-            for producto in productos:
+            for i,producto in enumerate(productos):
+                    y_scroll = i * 300  # o cualquier incremento razonable
+                    print(f"📜 Haciendo scroll a {y_scroll}px...")
+                    try:
+                        self.__driver.execute_script(f"window.scrollTo(0, {y_scroll});")
+                    except Exception as e:
+                        print(f"⚠️ Error haciendo scroll: {e}")
                     #Dentro de productinfo text-center hay un p que tiene el nombre del producto
-                    nombre_elemento = producto.find_element(By.TAG_NAME, "p")
+                    try:
+                        nombre_elemento = producto.find_element(By.TAG_NAME, "p")
+                        nombre = nombre_elemento.text.strip()
+                        print(f"Producto encontrado: {nombre}")
 
-                    nombre = nombre_elemento.text.strip()
-                    print(f"Producto encontrado: {nombre}")
-                    
-                    if nombre.lower() == nombre_buscado.lower():
-                        print(f"Producto '{nombre}' encontrado. Agregando al carrito...")
-                        boton = producto.find_element(By.CSS_SELECTOR, ".add-to-cart")
-                        boton.click()
-                        break
-                    else:
-                        print(f"Producto '{nombre}' no coincide con '{nombre_buscado}'")
+                        if nombre.lower() == nombre_buscado.lower():
+                            print(f"✅ Producto '{nombre}' encontrado. Agregando al carrito...")
+                            boton = producto.find_element(By.CSS_SELECTOR, ".add-to-cart")
+                            boton.click()
+                            break
+                        else:
+                            print(f"Producto '{nombre}' no coincide con '{nombre_buscado}'")
+                    except Exception as e:
+                        print(f"⚠️ Error leyendo producto: {e}")
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button.btn.btn-success.close-modal.btn-block")))
             print("Continuar con la compra...")
             continuar = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-success.close-modal.btn-block")))
@@ -159,202 +239,285 @@ class Automatizar(unittest.TestCase):
         except TimeoutException as e:
             print(f"\n⏰ Timeout esperando un elemento: {str(e)}")
             try:
-                screenshot_filename = f"timeout_casoPrueba1_{int(time.time())}.png"
-                screenshot_path = os.path.join(os.path.dirname(__file__), screenshot_filename)
-                self.__driver.save_screenshot(screenshot_path)
-                print(f"📸 Screenshot guardado: {screenshot_path}")
+                self.tomarScreenshot(f"timeout_agregarProducto_{int(time.time())}.png")
+                self.agregarProducto()
             except:
                 pass
         except InvalidSelectorException as e:
             print("Error en WEBVIEW: ")
 
-    #Correcto cuando valor = 1, icnorrecto cuando valor = 0
-    def casoDePrueba1(self, wait: WebDriverWait,valor=1):
+    def verificarExistenciaAnuncio(self,url):
+        url_actual = self.__driver.current_url
+        if url != url_actual:
+            self.cerrarIframeAnuncio()
+        return url_actual
+
+    def scroll_into_view(self, element):
         try:
+            self.__driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"⚠️ Error al hacer scroll hacia el elemento: {e}")
+
+    def casoDePrueba1(self):
+        try:
+            urlActual = self.__driver.current_url
+            wait = WebDriverWait(automatizar.getDriver(), 20)
             # Paso 3: Verificar que la página de inicio sea visible correctamente
             print("3. Verificando que la página de inicio sea visible...")
             wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             assert "Automation Exercise" in self.__driver.page_source, "La página de inicio no es visible"
             print("✅ Página de inicio verificada correctamente")
             
-            if valor == 0:
-                # Paso 4: Hacer clic en el botón "Registrarse / Iniciar sesión"
-                print("4. Haciendo clic en 'Signup / Login'...")
-                signup_login_btn = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Signup / Login")))
-                signup_login_btn.click()
-                time.sleep(2)
-                print("✅ Botón 'Signup / Login' clickeado")
+            # Paso 4: Hacer clic en el botón "Registrarse / Iniciar sesión"
+            print("4. Haciendo clic en 'Signup / Login'...")
+            signup_login_btn = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Signup / Login")))
+            self.scroll_into_view(signup_login_btn)
+            signup_login_btn.click()
+            time.sleep(2)
+            print("✅ Botón 'Signup / Login' clickeado")
             
-            else:
-                flecha = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div[role='button'], .arrow, .close-button")))
-                flecha.click()
-                # Paso 4: Hacer clic en el botón "Registrarse / Iniciar sesión"
-                print("4. Haciendo clic en 'Signup / Login'...")
-                signup_login_btn = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Signup / Login")))
-                signup_login_btn.click()
-                time.sleep(2)
-                print("✅ Botón 'Signup / Login' clickeado")
+            urlActual = self.verificarExistenciaAnuncio(urlActual)
+
+            # Paso 5: Verificar que "¡Registro de nuevo usuario!" esté visible
+            print("5. Verificando que 'New User Signup!' esté visible...")
+            titulo_signup=wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'New User Signup!')]")))
+            self.scroll_into_view(titulo_signup)
+            print("✅ Texto 'New User Signup!' verificado")
+            
+            # Paso 6: Ingresar nombre y dirección de correo electrónico
+            print("6. Ingresando nombre y email...")
+            nombre_input = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[data-qa='signup-name']")))
+            email_input = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='signup-email']")
+            self.scroll_into_view(nombre_input)
+            
+            # Generar datos únicos para el test
+            
+            timestamp = str(int(time.time()))
+            nombre_usuario = f"TestUser{timestamp}"
+            email_usuario = f"test{timestamp}@testmail.com"
+            
+            nombre_input.clear()
+            nombre_input.send_keys(nombre_usuario)
+            email_input.clear()
+            email_input.send_keys(email_usuario)
+            print(f"✅ Nombre: {nombre_usuario}, Email: {email_usuario}")
+            try:
+                actions = ActionChains(self.__driver)
+                actions.move_by_offset(10, 10).click().perform()
+                print("🖱️ Click simulado con ActionChains en (10,10)")
+            except Exception as e:
+                print(f"⚠️ No se pudo cerrar el teclado con tap: {e}")
+
+            # Paso 7: Hacer clic en el botón "Registrarse"
+            print("7. Haciendo clic en 'Signup'...")
+            signup_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-qa="signup-button"]')))
+            self.scroll_into_view(signup_btn)
+            signup_btn.click()
+
+            if self.__driver.current_url == urlActual:
+                print("⚠️Realmente no se hizo click'Signup'. Intentando clickeo con JavaScript...")
+                self.getDriver().execute_script("arguments[0].click();", signup_btn)
+
+
+            print("✅ Botón 'Signup' clickeado")
+            print("Esperando a que se cargue la página de información de cuenta...")
+            time.sleep(6)
+            
+            
+            # Paso 8: Verificar que 'INGRESAR INFORMACIÓN DE LA CUENTA' esté visible
+            print("8. Verificando 'ENTER ACCOUNT INFORMATION'...")
+            titulo_info = wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Enter Account Information') or contains(text(), 'ENTER ACCOUNT INFORMATION')]")))
+            self.scroll_into_view(titulo_info)
+            print("✅ Página de información de cuenta verificada")
+            
+            # Paso 9: Completar los datos de la cuenta
+            print("9. Completando datos de la cuenta...")
+            # Seleccionar título (Mr./Mrs.)
+            wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".radio-inline")))
+            radiosInlines = self.__driver.find_elements(By.CSS_SELECTOR, ".radio-inline")
+            print(f"🔄 Se encontraron {len(radiosInlines)} radios para seleccionar el título")
+            for radio in radiosInlines:
+                print(f"🔄 Verificando radio: {radio.text}")
+                try:
+                    radio.find_element(By.TAG_NAME, "input")
+                    if "Mr." in radio.text:
+                        print("✅ Seleccionando título 'Mr.'")
+                        radio.click()
+                        break
+                    
+                except Exception as e:
+                    print(f"⚠️ No se pudo seleccionar el título: {e}")
+            
+            # Contraseña
+        
+            password_input = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='password']")
+            self.scroll_into_view(password_input)
+            password_input.send_keys("TestPassword123!")
+            try:
+                actions = ActionChains(self.__driver)
+                actions.move_by_offset(10, 10).click().perform()
+                print("🖱️ Click simulado con ActionChains en (10,10)")
+            except Exception as e:
+                print(f"⚠️ No se pudo cerrar el teclado con tap: {e}")
+            
+            # Fecha de nacimiento
+            selector_days_div = wait.until(EC.presence_of_element_located((By.ID, "uniform-days")))
+            self.scroll_into_view(selector_days_div)
+            day_select_el = selector_days_div.find_element(By.TAG_NAME, "select")
+            day_select_el.click()
+            option_day = day_select_el.find_element(By.CSS_SELECTOR, "option[value='10']")
+            option_day.click()
+
+            # Mes
+            selector_months_div = self.__driver.find_element(By.ID, "uniform-months")
+            self.scroll_into_view(selector_months_div)
+            month_select_el = selector_months_div.find_element(By.TAG_NAME, "select")
+            month_select_el.click()
+            option_month = month_select_el.find_element(By.CSS_SELECTOR, "option[value='5']")
+            option_month.click()
+
+            # Año
+            selector_years_div = self.__driver.find_element(By.ID, "uniform-years")
+            self.scroll_into_view(selector_years_div)
+            year_select_el = selector_years_div.find_element(By.TAG_NAME, "select")
+            year_select_el.click()
+            option_year = year_select_el.find_element(By.CSS_SELECTOR, "option[value='1995']")
+            option_year.click()
+
+            print("✅ Fecha de nacimiento seleccionada: 10/5/1995")
+            
+            print("✅ Datos de cuenta completados")
+
+            titulo_checkboxs = self.__driver.find_element(By.XPATH, "//*[contains(text(), 'Sign Up for our newsletter!') or contains(text(), 'Receive special offers from our partners!')]")
+            self.scroll_into_view(titulo_checkboxs)
+            # Paso 10 y 11
+            print("10. Verificando 'Sign Up for our newsletter!' y 'Receive special offers from our partners!'...")
+            checkboxs = self.__driver.find_elements(By.CSS_SELECTOR, "input[type='checkbox']")
+            if len(checkboxs) >= 2:
+                print("✅ Se encontraron los checkboxs necesarios")
+                try:
+                    checkboxs[0].click()  # 'Sign Up for our newsletter!'
+                    print("✅ Checkbox 'Sign Up for our newsletter!' clickeado")
+                except ElementClickInterceptedException:
+                    print("⚠️ No se pudo hacer clic en 'Sign Up for our newsletter!'")
                 
-                # Paso 5: Verificar que "¡Registro de nuevo usuario!" esté visible
-                print("5. Verificando que 'New User Signup!' esté visible...")
-                wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'New User Signup!')]")))
-                print("✅ Texto 'New User Signup!' verificado")
-                
-                # Paso 6: Ingresar nombre y dirección de correo electrónico
-                print("6. Ingresando nombre y email...")
-                nombre_input = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[data-qa='signup-name']")))
-                email_input = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='signup-email']")
-                
-                # Generar datos únicos para el test
-                import random
-                timestamp = str(int(time.time()))
-                nombre_usuario = f"TestUser{timestamp}"
-                email_usuario = f"test{timestamp}@testmail.com"
-                
-                nombre_input.clear()
-                nombre_input.send_keys(nombre_usuario)
-                email_input.clear()
-                email_input.send_keys(email_usuario)
-                print(f"✅ Nombre: {nombre_usuario}, Email: {email_usuario}")
-                
-                # Paso 7: Hacer clic en el botón "Registrarse"
-                print("7. Haciendo clic en 'Signup'...")
-                signup_btn = self.__driver.find_element(By.CSS_SELECTOR, "button[data-qa='signup-button']")
-                signup_btn.click()
-                time.sleep(3)
-                print("✅ Botón 'Signup' clickeado")
-                
-                # Paso 8: Verificar que 'INGRESAR INFORMACIÓN DE LA CUENTA' esté visible
-                print("8. Verificando 'ENTER ACCOUNT INFORMATION'...")
-                wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Enter Account Information') or contains(text(), 'ENTER ACCOUNT INFORMATION')]")))
-                print("✅ Página de información de cuenta verificada")
-                
-                # Paso 9: Completar los datos de la cuenta
-                print("9. Completando datos de la cuenta...")
-                
-                # Seleccionar título (Mr./Mrs.)
-                title_radio = wait.until(EC.element_to_be_clickable((By.ID, "id_gender1")))  # Mr.
-                title_radio.click()
-                
-                # Contraseña
-                password_input = self.__driver.find_element(By.ID, "password")
-                password_input.send_keys("TestPassword123!")
-                
-                # Fecha de nacimiento
-                day_select = self.__driver.find_element(By.ID, "days")
-                day_select.send_keys("15")
-                
-                month_select = self.__driver.find_element(By.ID, "months")
-                month_select.send_keys("January")
-                
-                year_select = self.__driver.find_element(By.ID, "years")
-                year_select.send_keys("1990")
-                
-                print("✅ Datos de cuenta completados")
-                
-                # Paso 10: Seleccionar newsletter
-                print("10. Seleccionando suscripción al newsletter...")
-                newsletter_checkbox = self.__driver.find_element(By.ID, "newsletter")
-                if not newsletter_checkbox.is_selected():
-                    newsletter_checkbox.click()
-                
-                # Paso 11: Seleccionar ofertas especiales
-                print("11. Seleccionando ofertas especiales...")
-                offers_checkbox = self.__driver.find_element(By.ID, "optin")
-                if not offers_checkbox.is_selected():
-                    offers_checkbox.click()
-                
-                # Paso 12: Completar datos de dirección
-                print("12. Completando datos de dirección...")
-                
-                # Información personal
-                first_name = self.__driver.find_element(By.ID, "first_name")
-                first_name.send_keys("Test")
-                
-                last_name = self.__driver.find_element(By.ID, "last_name")
-                last_name.send_keys("User")
-                
-                company = self.__driver.find_element(By.ID, "company")
-                company.send_keys("Test Company")
-                
-                address1 = self.__driver.find_element(By.ID, "address1")
-                address1.send_keys("123 Test Street")
-                
-                address2 = self.__driver.find_element(By.ID, "address2")
-                address2.send_keys("Apt 456")
-                
-                # País
-                country = self.__driver.find_element(By.ID, "country")
-                country.send_keys("United States")
-                
-                # Estado
-                state = self.__driver.find_element(By.ID, "state")
-                state.send_keys("California")
-                
-                # Ciudad
-                city = self.__driver.find_element(By.ID, "city")
-                city.send_keys("Los Angeles")
-                
-                # Código postal
-                zipcode = self.__driver.find_element(By.ID, "zipcode")
-                zipcode.send_keys("90210")
-                
-                # Teléfono móvil
-                mobile_number = self.__driver.find_element(By.ID, "mobile_number")
-                mobile_number.send_keys("1234567890")
-                
-                print("✅ Datos de dirección completados")
-                
-                # Paso 13: Hacer clic en "Crear cuenta"
-                print("13. Haciendo clic en 'Create Account'...")
-                create_account_btn = self.__driver.find_element(By.CSS_SELECTOR, "button[data-qa='create-account']")
-                create_account_btn.click()
-                time.sleep(5)
-                print("✅ Botón 'Create Account' clickeado")
-                
-                # Paso 14: Verificar que '¡CUENTA CREADA!' esté visible
-                print("14. Verificando 'ACCOUNT CREATED!'...")
-                wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Account Created!') or contains(text(), 'ACCOUNT CREATED!')]")))
-                print("✅ Cuenta creada exitosamente")
-                
-                # Paso 15: Hacer clic en "Continuar"
-                print("15. Haciendo clic en 'Continue'...")
-                continue_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[data-qa='continue-button']")))
-                continue_btn.click()
-                time.sleep(3)
-                print("✅ Botón 'Continue' clickeado")
-                
-                # Paso 16: Verificar que "Logged in as username" esté visible
-                print("16. Verificando 'Logged in as username'...")
-                wait.until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), 'Logged in as') and contains(text(), '{nombre_usuario}')]")))
-                print(f"✅ Usuario logueado como: {nombre_usuario}")
-                
-                # Paso 17: Hacer clic en "Eliminar cuenta"
-                print("17. Haciendo clic en 'Delete Account'...")
-                delete_account_btn = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Delete Account")))
-                delete_account_btn.click()
-                time.sleep(3)
-                print("✅ Botón 'Delete Account' clickeado")
-                
-                # Paso 18: Verificar que "¡CUENTA ELIMINADA!" esté visible y hacer clic en "Continuar"
-                print("18. Verificando 'ACCOUNT DELETED!' y haciendo clic en 'Continue'...")
-                wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Account Deleted!') or contains(text(), 'ACCOUNT DELETED!')]")))
-                print("✅ Cuenta eliminada exitosamente")
-                
-                continue_btn_final = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[data-qa='continue-button']")))
-                continue_btn_final.click()
-                time.sleep(2)
-                print("✅ Proceso completado - Botón 'Continue' final clickeado")
-                
-                print("\n🎉 ¡Caso de Prueba 1 ejecutado exitosamente!")
+                try:
+                    checkboxs[1].click()  # 'Receive special offers from our partners!'
+                    print("✅ Checkbox 'Receive special offers from our partners!' clickeado")
+                except ElementClickInterceptedException:
+                    print("⚠️ No se pudo hacer clic en 'Receive special offers from our partners!'")
+            
+            # Paso 12: Completar datos de dirección
+            print("12. Completando datos de dirección...")
+            
+            # Información personal
+            first_name = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='first-name']")
+            self.scroll_into_view(first_name)
+            first_name.send_keys("Test")
+            
+            last_name = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='last-name']")
+            self.scroll_into_view(last_name)
+            last_name.send_keys("User")
+            
+            company = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='company']")
+            self.scroll_into_view
+            company.send_keys("Test Company")
+            
+            address1 = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='address']")
+            self.scroll_into_view(address1)
+            address1.send_keys("123 Test Street")
+            
+            address2 = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='address2']")
+            self.scroll_into_view(address2)
+            address2.send_keys("Apt 456")
+            
+            # País
+            contry_select_el = self.__driver.find_element(By.ID, "country")
+            self.scroll_into_view(contry_select_el)
+            self.scroll_into_view(contry_select_el)
+            Select(contry_select_el).select_by_visible_text("United States")
+            
+            # Estado
+            state = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='state']")
+            self.scroll_into_view(state)
+            state.send_keys("California")
+            
+            # Ciudad
+            city = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='city']")
+            self.scroll_into_view(city)
+            city.send_keys("Los Angeles")
+            
+            # Código postal
+            zipcode = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='zipcode']")
+            self.scroll_into_view(zipcode)
+            zipcode.send_keys("90210")
+            
+            # Teléfono móvil
+            mobile_number = self.__driver.find_element(By.CSS_SELECTOR, "input[data-qa='mobile-number']")
+            self.scroll_into_view(mobile_number)
+            mobile_number.send_keys("1234567890")
+            
+            print("✅ Datos de dirección completados")
+            
+            # Paso 13: Hacer clic en "Crear cuenta"
+            print("13. Haciendo clic en 'Create Account'...")
+            create_account_btn = self.__driver.find_element(By.CSS_SELECTOR, "button[data-qa='create-account']")
+            self.scroll_into_view(create_account_btn)
+            create_account_btn.click()
+            if self.__driver.current_url == urlActual:
+                print("⚠️ Realmente no se hizo click 'Create Account'. Intentando clickeo con JavaScript...")
+                self.getDriver().execute_script("arguments[0].click();", create_account_btn)
+            time.sleep(5)
+            print("✅ Botón 'Create Account' clickeado")
+            urlActual = self.verificarExistenciaAnuncio(urlActual)
+
+            # Paso 14: Verificar que '¡CUENTA CREADA!' esté visible
+            print("14. Verificando 'ACCOUNT CREATED!'...")
+            wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Account Created!') or contains(text(), 'ACCOUNT CREATED!')]")))
+            print("✅ Cuenta creada exitosamente")
+            
+            # Paso 15: Hacer clic en "Continuar"
+            print("15. Haciendo clic en 'Continue'...")
+            continue_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[data-qa='continue-button']")))
+            self.scroll_into_view(continue_btn)
+            continue_btn.click()
+            time.sleep(3)
+            print("✅ Botón 'Continue' clickeado")
+            urlActual = self.verificarExistenciaAnuncio(urlActual)
+            
+            # Paso 16: Verificar que "Logged in as username" esté visible
+            print("16. Verificando 'Logged in as username'...")
+            wait.until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), 'Logged in as') and contains(text(), '{nombre_usuario}')]")))
+            print(f"✅ Usuario logueado como: {nombre_usuario}")
+            
+            # Paso 17: Hacer clic en "Eliminar cuenta"
+            print("17. Haciendo clic en 'Delete Account'...")
+            delete_account_btn = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Delete Account")))
+            delete_account_btn.click()
+            time.sleep(3)
+            print("✅ Botón 'Delete Account' clickeado")
+            urlActual = self.verificarExistenciaAnuncio(urlActual)
+            
+            # Paso 18: Verificar que "¡CUENTA ELIMINADA!" esté visible y hacer clic en "Continuar"
+            print("18. Verificando 'ACCOUNT DELETED!' y haciendo clic en 'Continue'...")
+            wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Account Deleted!') or contains(text(), 'ACCOUNT DELETED!')]")))
+            print("✅ Cuenta eliminada exitosamente")
+            
+            continue_btn_final = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[data-qa='continue-button']")))
+            self.scroll_into_view(continue_btn_final)
+            continue_btn_final.click()
+            time.sleep(2)
+            print("✅ Proceso completado - Botón 'Continue' final clickeado")
+            
+            print("\n🎉 ¡Caso de Prueba 1 ejecutado exitosamente!")
 
         except TimeoutException as e:
             print(f"\n⏰ Timeout esperando un elemento: {str(e)}")
             try:
                 screenshot_filename = f"timeout_casoPrueba1_{int(time.time())}.png"
-                screenshot_path = os.path.join(os.path.dirname(__file__), screenshot_filename)
-                self.__driver.save_screenshot(screenshot_path)
-                print(f"📸 Screenshot guardado: {screenshot_path}")
+                self.tomarScreenshot(screenshot_filename)
+                self.casoDePrueba1()
             except:
                 pass
 
@@ -363,9 +526,8 @@ class Automatizar(unittest.TestCase):
             # Tomar screenshot para debug si es posible
             try:
                 screenshot_filename = f"error_casoPrueba1_{int(time.time())}.png"
-                screenshot_path = os.path.join(os.path.dirname(__file__), screenshot_filename)
-                self.__driver.save_screenshot(screenshot_path)
-                print(f"📸 Screenshot guardado: {screenshot_path}")
+                self.tomarScreenshot(screenshot_filename)
+                self.casoDePrueba1()
             except:
                 pass
             
@@ -374,15 +536,14 @@ class Automatizar(unittest.TestCase):
             # Tomar screenshot para debug si es posible
             try:
                 screenshot_filename = f"error_casoPrueba1_{int(time.time())}.png"
-                screenshot_path = os.path.join(os.path.dirname(__file__), screenshot_filename)
-                self.__driver.save_screenshot(screenshot_path)
+                self.tomarScreenshot(screenshot_filename)
                 print(f"📸 Screenshot guardado: {screenshot_path}")
             except:
                 pass
 
-    def casoDePrueba24(self, wait: WebDriverWait):
-        """Caso de Prueba 24: Descargar factura después de la orden de compra"""
+    def casoDePrueba24(self):
         try:
+            wait = WebDriverWait(automatizar.getDriver(), 20)
             print("\n🧪 Iniciando Caso de Prueba 24: Descargar factura después de la orden de compra")
             
             # Paso 3: Verificar que la página de inicio sea visible correctamente
@@ -631,27 +792,25 @@ class Automatizar(unittest.TestCase):
             except:
                 pass       
 if __name__ == "__main__":
+    
     # Crear instancia de Automatizar y ejecutar el flujo
     automatizar = Automatizar()
     automatizar.iniciarDriver()
-    automatizar.manejoDialogos()
-    wait = WebDriverWait(automatizar.getDriver(), 20)
-    automatizar.entrarPagina("https://automationexercise.com/", wait)
-    automatizar.cambiarContexto(wait)
+    #automatizar.manejoDialogos()
+    automatizar.entrarPagina("https://automationexercise.com/")
+    automatizar.cambiarContexto()
 
     # Pruebas en la pagina:
     """
     Caso de prueba 1: Registrar usuario
     Caso de prueba 24: Descargar factura después de la orden de compra
     """
-    
-    automatizar.agregarProducto(wait)
+    automatizar.cerrarIframeAnuncio()
 
-    print('\n🧪 Ejecutando Caso de Prueba 1: Registrar usuario Invalido')
-    automatizar.casoDePrueba1(wait,valor=0)
-    print('\n🧪 Ejecutando Caso de Prueba 1: Registrar usuario Valido')
-    automatizar.casoDePrueba1(wait,valor=1) 
-    #automatizar.casoDePrueba24(wait)
+    automatizar.agregarProducto()
+    print('\n🧪 Ejecutando Caso de Prueba 1: Registrar usuario')
+    automatizar.casoDePrueba1() 
+    #automatizar.casoDePrueba24()
     
     time.sleep(60)
     automatizar.cerrarDriver()
