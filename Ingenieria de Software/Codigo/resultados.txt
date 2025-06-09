@@ -1,0 +1,281 @@
+F.FFFFFFFFFF
+CP20 omitido: concatenación de cadenas no es compatible con la calculadora Android.
+.FF.FFFF
+======================================================================
+FAIL: test_cp1 (__main__.TestCalculadoraTelefono.test_cp1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 80, in test_cp1
+    def test_cp1(self): self.plantilla_test_resultado('+', '9999999999', '9999999999', '19999999998')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '19999999998 Resultado del cálculo' != '19999999998'
+- 19999999998 Resultado del cálculo
++ 19999999998
+ : 9999999999 + 9999999999 = 19999999998 Resultado del cálculo
+Esperado: 19999999998
+
+======================================================================
+FAIL: test_cp11 (__main__.TestCalculadoraTelefono.test_cp11)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 84, in test_cp11
+    def test_cp11(self): self.plantilla_test_resultado('*', '9999999999', '9999999999', '99999999980000000001')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '1.00000000E Más 20 Resultado del cálculo' != '99999999980000000001'
+- 1.00000000E Más 20 Resultado del cálculo
++ 99999999980000000001
+ : 9999999999 * 9999999999 = 1.00000000E Más 20 Resultado del cálculo
+Esperado: 99999999980000000001
+
+======================================================================
+FAIL: test_cp12 (__main__.TestCalculadoraTelefono.test_cp12)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 85, in test_cp12
+    def test_cp12(self): self.plantilla_test_resultado('*', '-9.9999999', '9.999999999', '-99.999998900000001')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '999999989.9 Resultado del cálculo' != '-99.999998900000001'
+- 999999989.9 Resultado del cálculo
++ -99.999998900000001
+ : -9.9999999 * 9.999999999 = 999999989.9 Resultado del cálculo
+Esperado: -99.999998900000001
+
+======================================================================
+FAIL: test_cp13 (__main__.TestCalculadoraTelefono.test_cp13)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 97, in test_cp13
+    def test_cp13(self): self.plantilla_test_error('*', 'e8.', '9999999999')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 79999999992 Resultado del cálculo
+
+======================================================================
+FAIL: test_cp14 (__main__.TestCalculadoraTelefono.test_cp14)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 98, in test_cp14
+    def test_cp14(self): self.plantilla_test_error('*', '99999999999', '-.')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 99999999999 Resultado del cálculo
+
+======================================================================
+FAIL: test_cp15 (__main__.TestCalculadoraTelefono.test_cp15)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 86, in test_cp15
+    def test_cp15(self): self.plantilla_test_resultado('/', '9999999999', '9999999999', '1')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '1 Resultado del cálculo' != '1'
+- 1 Resultado del cálculo
++ 1
+ : 9999999999 / 9999999999 = 1 Resultado del cálculo
+Esperado: 1
+
+======================================================================
+FAIL: test_cp16 (__main__.TestCalculadoraTelefono.test_cp16)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 87, in test_cp16
+    def test_cp16(self): self.plantilla_test_resultado('/', '9999999999', '999.99999', '10000000.099000001')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '10000000.099 Resultado del cálculo' != '10000000.099000001'
+- 10000000.099 Resultado del cálculo
++ 10000000.099000001
+ : 9999999999 / 999.99999 = 10000000.099 Resultado del cálculo
+Esperado: 10000000.099000001
+
+======================================================================
+FAIL: test_cp17 (__main__.TestCalculadoraTelefono.test_cp17)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 88, in test_cp17
+    def test_cp17(self): self.plantilla_test_resultado('/', '99999', '9999999999', '0')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '0.0000099999 Resultado del cálculo' != '0'
+- 0.0000099999 Resultado del cálculo
++ 0
+ : 99999 / 9999999999 = 0.0000099999 Resultado del cálculo
+Esperado: 0
+
+======================================================================
+FAIL: test_cp18 (__main__.TestCalculadoraTelefono.test_cp18)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 99, in test_cp18
+    def test_cp18(self): self.plantilla_test_error('/', '9999999999', '0')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 9999999999 Dividir entre 0
+
+======================================================================
+FAIL: test_cp19 (__main__.TestCalculadoraTelefono.test_cp19)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 100, in test_cp19
+    def test_cp19(self): self.plantilla_test_error('/', '0', '0')
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 0 Dividir entre 0
+
+======================================================================
+FAIL: test_cp2 (__main__.TestCalculadoraTelefono.test_cp2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 81, in test_cp2
+    def test_cp2(self): self.plantilla_test_resultado('+', '9.999999999', '9.999999999', '19.99999998')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '19.999999998 Resultado del cálculo' != '19.99999998'
+- 19.999999998 Resultado del cálculo
++ 19.99999998
+ : 9.999999999 + 9.999999999 = 19.999999998 Resultado del cálculo
+Esperado: 19.99999998
+
+======================================================================
+FAIL: test_cp3 (__main__.TestCalculadoraTelefono.test_cp3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 91, in test_cp3
+    def test_cp3(self): self.plantilla_test_error('+', '99999999999', 'K')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 99999999999 Más
+
+======================================================================
+FAIL: test_cp4 (__main__.TestCalculadoraTelefono.test_cp4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 92, in test_cp4
+    def test_cp4(self): self.plantilla_test_error('+', 'K', '99999999999')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 99999999999
+
+======================================================================
+FAIL: test_cp6 (__main__.TestCalculadoraTelefono.test_cp6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 82, in test_cp6
+    def test_cp6(self): self.plantilla_test_resultado('-', '9999999999', '9999999999', '0')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '0 Resultado del cálculo' != '0'
+- 0 Resultado del cálculo
++ 0
+ : 9999999999 - 9999999999 = 0 Resultado del cálculo
+Esperado: 0
+
+======================================================================
+FAIL: test_cp7 (__main__.TestCalculadoraTelefono.test_cp7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 83, in test_cp7
+    def test_cp7(self): self.plantilla_test_resultado('-', '9999999999', '-999999999', '10999999998')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 71, in plantilla_test_resultado
+    self.assertEqual(resultado, esperado,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                     f"{op1} {operador} {op2} = {resultado}\nEsperado: {esperado}")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '9000000000 Resultado del cálculo' != '10999999998'
+- 9000000000 Resultado del cálculo
++ 10999999998
+ : 9999999999 - -999999999 = 9000000000 Resultado del cálculo
+Esperado: 10999999998
+
+======================================================================
+FAIL: test_cp8 (__main__.TestCalculadoraTelefono.test_cp8)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 94, in test_cp8
+    def test_cp8(self): self.plantilla_test_error('-', '99999999999', 'M')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 99999999999 Menos
+
+======================================================================
+FAIL: test_cp9 (__main__.TestCalculadoraTelefono.test_cp9)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 95, in test_cp9
+    def test_cp9(self): self.plantilla_test_error('-', 'E', '99999999999')
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Ramiro\OneDrive\Documentos\GitHub\Facultad\Ingenieria de Software\Codigo\calculadora.py", line 76, in plantilla_test_error
+    self.assertTrue(resultado in ["", "Infinity", "-Infinity", "∞", "Error", "Can't divide by 0", "0"],
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    f"Se esperaba error, pero se obtuvo: {resultado}")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Se esperaba error, pero se obtuvo: 99999999999
+
+----------------------------------------------------------------------
+Ran 20 tests in 263.086s
+
+FAILED (failures=17)
