@@ -361,6 +361,8 @@ class Automatizar(unittest.TestCase):
             except Exception as e:
                 print(f"⚠️ No se pudo cerrar el teclado con tap: {e}")
             
+            time.sleep(2)
+
             # Fecha de nacimiento
             selector_days_div = wait.until(EC.presence_of_element_located((By.ID, "uniform-days")))
             self.scroll_into_view(selector_days_div)
