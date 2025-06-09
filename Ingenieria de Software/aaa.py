@@ -1,7 +1,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-resultado = '1.00000000E Más 20 Resultado del cálculo'
+resultado = '-99.99999874'
 # Arregla notación científica localizada (idioma español)
 resultado = resultado.replace("E Más ", "E+").replace("E más ", "E+")
 resultado = resultado.replace("E Menos ", "E-").replace("E menos ", "E-")
