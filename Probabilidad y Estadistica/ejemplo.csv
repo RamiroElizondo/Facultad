@@ -1,0 +1,6 @@
+ID_Paciente,Edad,Género,País,Conteo_de_Globulos_blancos,Conteo_de_Globulos_rojos,Conteo_de_Plaquetas,Nivel_de_Hemoglobina,Blastos_de_Médula_Osea,Mutación_Genética,Historia_Familiar,Estado_de_Fumado,Consumo_de_Alcohol,Exposición_a_Radiación,Historia_de_Infección,IMC,Enfermedad_Crónica,Trastornos_Inmunológicos,Etnicidad,Estado_Socioeconómico,Urbano_Rural,Estado_de_Leucemia
+14922,18,Female,China,4542,4.2,185587,14.5,9,No,No,No,No,No,No,31.0,No,No,Ethnic_Group_A,Medium,Urban,Negative
+29680,57,Female,Australia,9566,5.07,187903,12.1,46,No,Yes,No,Yes,No,No,20.0,No,No,Ethnic_Group_B,Medium,Urban,Negative
+115573,32,Male,Turkey,6105,5.31,215682,10.2,4,No,No,Yes,No,No,Yes,23.0,No,No,Ethnic_Group_C,Medium,Urban,Negative
+1835,59,Female,Norway,7309,4.05,231293,13.8,87,No,No,Yes,Yes,No,No,33.4,No,Yes,Ethnic_Group_A,Low,Urban,Negative
+141640,55,Male,USA,4390,5.84,219517,16.4,3,No,No,Yes,No,No,No,24.6,No,No,Ethnic_Group_A,Low,Urban,Negative
