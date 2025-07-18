@@ -19,4 +19,6 @@ class Docima:
     def docima_media_varianza_desconocida(self, sample, mu_0):
         t_stat, p_value = ttest_1samp(sample, mu_0)
         return t_stat, p_value
+    
+    
 

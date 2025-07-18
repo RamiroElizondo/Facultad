@@ -112,7 +112,27 @@ class Menu:
             print("\n4-Docima para comparar la diferencia de proporciones")
             print("\n5-Salir")
             opcion = input("Seleccione una opción: ")
-
+            if opcion == "1":
+                mu_0 = float(input("Ingrese el valor de la media poblacional (mu_0): "))
+                sigma = float(input("Ingrese el valor de la desviación estándar poblacional (sigma): "))
+                sample = self.pob1["Nivel_de_Hemoglobina"].dropna().values
+                z, p = docima.docima_media_varianza_conocida(sample, mu_0, sigma)
+                print(f"Estadístico Z: {z}, p-valor: {p}")
+            elif opcion == "2":
+                mu_0 = float(input("Ingrese el valor de la media poblacional (mu_0): "))
+                sample = self.pob1["Nivel_de_Hemoglobina"].dropna().values
+                t_stat, p_value = docima.docima_media_varianza_desconocida(sample, mu_0)
+                print(f"Estadístico T: {t_stat}, p-valor: {p_value}")
+            elif opcion == "3":
+                # Implementar lógica para proporciones
+                pass
+            elif opcion == "4":
+                # Implementar lógica para comparar proporciones
+                pass
+            elif opcion == "5":
+                break
+            else:
+                print("Opción no válida. Intente nuevamente.")
             
 
     def pruebas(self):
