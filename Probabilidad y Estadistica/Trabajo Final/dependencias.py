@@ -111,17 +111,17 @@ def prueba_independencia(
     chi2_lib, p, dof, esperada = chi2_contingency(tabla)
     print("\n📊 Frecuencias esperadas:")
     print(pd.DataFrame(esperada, index=tabla.index, columns=tabla.columns).round(2))
-    print(f"Chi² (SciPy) : {chi2_lib:.4f}")
+    print(f"Chi² (SciPy) : {chi2_lib:.2f}")
 
     # 4) Chi‑cuadrado manual
     chi2_manual = ((tabla.values - esperada) ** 2 / esperada).sum()
-    print(f"Chi² (manual): {chi2_manual:.4f}")
+    print(f"Chi² (manual): {chi2_manual:.2f}")
 
     # 5) Valor crítico
     r, c = tabla.shape
     dof = (r - 1) * (c - 1)
     valor_critico = chi2.ppf(1 - alpha, dof)
-    print(f"\nValor crítico χ²(1‑α={1-alpha}) con gl={dof}: {valor_critico:.4f}")
+    print(f"\nValor crítico χ²(1‑α={1-alpha}) con gl={dof}: {valor_critico:.2f}")
 
     # 6) Conclusión
     if chi2_manual > valor_critico: 

@@ -3,10 +3,12 @@ from pathlib import Path
 from dependencias import analizar_dependencias, prueba_dependencias, prueba_independencia
 from analisis_exploratorio import Analisis_exploratorio
 from normal import test_normalidad
+from docimas import Docimas
+import os
 
 class Menu:
     def __init__(self):
-        #self.dividir_dataset()
+
         self.poblacion, self.pob1, self.pob2 = self.cargar_datasets()
 
 
@@ -52,14 +54,10 @@ class Menu:
     def cargar_datasets(self):
         # Ruta del dataset original
         # Una vez dividido, cargamos las poblaciones
-        RUTA_CSV_ORIGINAL = "C:\\Users\\Ramiro\\OneDrive\\Documentos\\GitHub\\Facultad\\Probabilidad y Estadistica\\Trabajo Final\\biased_leukemia_dataset.csv"
-
-        #Para tener dos poblaciones, dividimos el dataset original
-        #dividir_dataset()
-
-        # Una vez dividido, cargamos las poblaciones
-        RUTA_CSV_POB1 = "C:\\Users\\Ramiro\\OneDrive\\Documentos\\GitHub\\Facultad\\Probabilidad y Estadistica\\Trabajo Final\\poblacion_1.csv"
-        RUTA_CSV_POB2 = "C:\\Users\\Ramiro\\OneDrive\\Documentos\\GitHub\\Facultad\\Probabilidad y Estadistica\\Trabajo Final\\poblacion_2.csv"
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        RUTA_CSV_ORIGINAL = os.path.join(BASE_DIR, "biased_leukemia_dataset.csv")
+        RUTA_CSV_POB1 = os.path.join(BASE_DIR, "poblacion_1.csv")
+        RUTA_CSV_POB2 = os.path.join(BASE_DIR, "poblacion_2.csv")
                         
         poblacion = pd.read_csv(RUTA_CSV_ORIGINAL)
         pob1 = pd.read_csv(RUTA_CSV_POB1)
@@ -102,6 +100,20 @@ class Menu:
         df_resultados = test_normalidad(self.pob2)
         print("Resultados de la prueba de normalidad:")
         print(df_resultados)
+
+    def docimas(self):
+        docima = Docimas()
+        print("\n=== Análisis de Docimas ===")
+        
+        while True:
+            print("\n1-Docima respecto a medias y varianza poblacional") 
+            print("\n2-Docima para comparar medias de dos poblaciones")
+            print("\n3-Docimas para la proporcion poblacional")
+            print("\n4-Docima para comparar la diferencia de proporciones")
+            print("\n5-Salir")
+            opcion = input("Seleccione una opción: ")
+
+            
 
     def pruebas(self):
         print("Análisis de General de Dependencias")
