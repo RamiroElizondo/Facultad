@@ -9,7 +9,7 @@ def graficar_variables(df):
     # Configuración general
     plt.style.use("ggplot")
     sns.set_theme()
-    OUTPUT_DIR = "poblacion_1"
+    OUTPUT_DIR = "poblacionGeneral"
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     # Recorrer columnas
     for col in df.columns:
@@ -108,4 +108,4 @@ def main():
     
 
 if __name__ == "__main__":
-    graficar_variables(pd.read_csv("water_potability.csv"))
+    graficar_variables(pd.read_csv("biased_leukemia_dataset.csv"))

@@ -8,9 +8,8 @@ import os
 
 class Menu:
     def __init__(self):
-
+        #self.dividir_dataset()
         self.poblacion, self.pob1, self.pob2 = self.cargar_datasets()
-
 
     def mostrar_menu(self):
         print("\n=== Menú Principal ===")
@@ -33,32 +32,29 @@ class Menu:
             print("Saliendo del programa...")
             return False
 
-    def dividir_dataset(self,df):
+    def dividir_dataset(self):
         # Cargar el dataset
         df = pd.read_csv("biased_leukemia_dataset.csv")
 
-        # Mezclar aleatoriamente el dataset (sin modificar el original)
-        df_shuffled = df.sample(frac=1, random_state=42).reset_index(drop=True)
+        # Filtrar pacientes por país
+        poblacion_1 = df[df["País"] == "India"].copy()
+        poblacion_2 = df[df["País"] == "USA"].copy()
 
-        # Dividir a la mitad
-        n = len(df_shuffled) // 2
-        poblacion_1 = df_shuffled.iloc[:n].copy()
-        poblacion_2 = df_shuffled.iloc[n:].copy()
+        print(f"Población 1 (India): {len(poblacion_1)} registros")
+        print(f"Población 2 (USA): {len(poblacion_2)} registros")
 
-        print(f"Población 1: {len(poblacion_1)} registros")
-        print(f"Población 2: {len(poblacion_2)} registros")
-
-        poblacion_1.to_csv("poblacion_1.csv", index=False)
-        poblacion_2.to_csv("poblacion_2.csv", index=False)
+        # Guardar en archivos CSV
+        poblacion_1.to_csv("poblacionINDIA.csv", index=False)
+        poblacion_2.to_csv("poblacionUSA.csv", index=False)
 
     def cargar_datasets(self):
         # Ruta del dataset original
         # Una vez dividido, cargamos las poblaciones
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         RUTA_CSV_ORIGINAL = os.path.join(BASE_DIR, "biased_leukemia_dataset.csv")
-        RUTA_CSV_POB1 = os.path.join(BASE_DIR, "poblacion_1.csv")
-        RUTA_CSV_POB2 = os.path.join(BASE_DIR, "poblacion_2.csv")
-                        
+        RUTA_CSV_POB1 = os.path.join(BASE_DIR, "poblacionINDIA.csv")
+        RUTA_CSV_POB2 = os.path.join(BASE_DIR, "poblacionUSA.csv")
+
         poblacion = pd.read_csv(RUTA_CSV_ORIGINAL)
         pob1 = pd.read_csv(RUTA_CSV_POB1)
         pob2 = pd.read_csv(RUTA_CSV_POB2)
@@ -84,11 +80,13 @@ class Menu:
         objeto_analisis1 = Analisis_exploratorio(id=1,data=self.pob1)
         objeto_analisis1.estadisticas_descriptivas()
         objeto_analisis1.graficar_variables()
+        #objeto_analisis1.guardar_graficos()
 
         print("\n=== Análisis de la Población 2 ===")
         objeto_analisis2 = Analisis_exploratorio(id=2,data=self.pob2)
         objeto_analisis2.estadisticas_descriptivas()
         objeto_analisis2.graficar_variables()
+        #objeto_analisis2.guardar_graficos()
 
     def analisis_normalidad(self):
         print("\n=== Análisis de Normalidad ===")
@@ -101,28 +99,131 @@ class Menu:
         print("Resultados de la prueba de normalidad:")
         print(df_resultados)
 
+    def creacion_muestra(self, pob, n=5000, condicion=None):
+        variable = input("Ingrese la variable numérica para la docima: ")
+        if variable not in pob.columns:
+            print(f"La variable '{variable}' no se encuentra en la población seleccionada.")
+            return None, None, None, None, None
+        print(f"Variable seleccionada: {variable}")
+        if condicion != None:
+            #La condicion puede ser: pacientes menores de 30 años, pacientes mayores a 60 años, pacientes mujeres,
+            if condicion == "menores_30":
+                pob_filtrada = pob[pob["Edad"] < 30]
+            elif condicion == "mayores_60":
+                pob_filtrada = pob[pob["Edad"] > 60]
+            elif condicion == "mujeres":
+                pob_filtrada = pob[pob["Género"] == "Female"]
+            sample = pob_filtrada.loc[pob_filtrada["Género"] == "Female", variable]
+            mediaSample = sample.mean()
+            varianzaSample = sample.var(ddof=1)
+
+            mediaPoblacional = pob[variable].mean()
+            varianzaPoblacional = pob[variable].var(ddof=1)
+        else: 
+            sample = pob[variable].dropna().sample(n, random_state=42)
+            mediaSample = sample.mean()
+            varianzaSample = sample.var(ddof=1)
+
+            mediaPoblacional = pob[variable].mean()
+            varianzaPoblacional = pob[variable].var(ddof=1)
+            return sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional
+
+    """ def creacion_muestra(self, pob, n, condicion=None):
+        variable = input("Ingrese la variable numérica para la docima: ")
+        if variable not in pob.columns:
+            print(f"La variable '{variable}' no se encuentra en la población seleccionada.")
+            return None, None, None, None, None
+        print(f"Variable seleccionada: {variable}")
+        if condicion != None:
+            #La condicion puede ser: pacientes menores de 30 años, pacientes mayores a 60 años, pacientes mujeres,
+            if condicion == "menores_30":
+                pob = pob[pob["Edad"] < 30]
+            elif condicion == "mayores_60":
+                pob = pob[pob["Edad"] > 60]
+            elif condicion == "mujeres":
+                pob = pob[pob["Género"] == "Female"]
+        sample = pob[variable].dropna().sample(n, random_state=42)
+        mediaSample = sample.mean()
+        varianzaSample = sample.var(ddof=1)
+
+        mediaPoblacional = pob[variable].mean()
+        varianzaPoblacional = pob[variable].var(ddof=1)
+        return sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional"""
+
     def docimas(self):
         docima = Docimas()
         print("\n=== Análisis de Docimas ===")
         
         while True:
-            print("\n1-Docima respecto a medias y varianza poblacional") 
-            print("\n2-Docima para comparar medias de dos poblaciones")
-            print("\n3-Docimas para la proporcion poblacional")
-            print("\n4-Docima para comparar la diferencia de proporciones")
-            print("\n5-Salir")
+            print("\nSeleccione el tipo de docima que desea realizar:")
+            print("1-Docima respecto a medias y varianza poblacional") 
+            print("2-Docima para comparar medias de dos poblaciones")
+            print("3-Docimas para la proporcion poblacional")
+            print("4-Docima para comparar la diferencia de proporciones")
+            print("5-P-valor")
+            print("6-Salir")
             opcion = input("Seleccione una opción: ")
+            if opcion == "6":
+                print("Saliendo del análisis de docimas...")
+                break
+
+            
             if opcion == "1":
-                mu_0 = float(input("Ingrese el valor de la media poblacional (mu_0): "))
-                sigma = float(input("Ingrese el valor de la desviación estándar poblacional (sigma): "))
-                sample = self.pob1["Nivel_de_Hemoglobina"].dropna().values
-                z, p = docima.docima_media_varianza_conocida(sample, mu_0, sigma)
-                print(f"Estadístico Z: {z}, p-valor: {p}")
+                aux = input("¿Que población: (1 o 2)? ")
+                pob = None
+                if aux == "1":
+                    pob = self.pob1.copy()
+                    print("Población 1 seleccionada.")
+                elif aux == "2":
+                    pob = self.pob2.copy()
+                    print("Población 2 seleccionada.")
+                else:
+                    print("Opción no válida. Intente nuevamente.")
+                    continue
+                print("\n==== Docima respecto a medias y varianza poblacional ====\n")
+                print("\n-----Docima para mu cuando sigma cuadrado es conocido")
+                n = int(input("Ingrese el tamaño de la muestra: "))
+               
+                sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
+                if sample is None:
+                    continue
+                docima.docima_varianza_conocida(mediaSample, varianzaPoblacional,n)
+
+                print("\n-----Docima para mu cuando sigma cuadrado es desconocido")
+                n = int(input("Ingrese el tamaño de la muestra: "))
+                sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
+                if sample is None:
+                    continue
+                docima.docima_varianza_desconocida(mediaSample, varianzaSample,n)
+                
+                print("\n------Docima para sigma cuadrado")
+                n = int(input("Ingrese el tamaño de la muestra: "))
+                sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
+                if sample is None:
+                    continue
+                docima.docima_media_varianza_desconocida(varianzaSample,n)
+            
             elif opcion == "2":
-                mu_0 = float(input("Ingrese el valor de la media poblacional (mu_0): "))
-                sample = self.pob1["Nivel_de_Hemoglobina"].dropna().values
-                t_stat, p_value = docima.docima_media_varianza_desconocida(sample, mu_0)
-                print(f"Estadístico T: {t_stat}, p-valor: {p_value}")
+                print("\n==== Docima para comparar medias de dos poblaciones ====\n")
+                #Muestra 1
+                condicion = input("Condicion de la muestra: ")
+                print("Población 1:")
+                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
+                print("Población 2:")
+                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
+                if sample1 is None or sample2 is None:
+                    continue
+                print("-----Docima para varianzas conocidas iguales")
+                docima.docima_varianzas_conocidas_iguales(mediaSample1, mediaSample2, len(sample1), len(sample2))
+
+                print("\n-----Docima para varianzas conocidas diferentes")
+                docima.docima_varianzas_conocidas_diferentes(mediaSample1, mediaSample2, varianzaPoblacional1,varianzaPoblacional2, len(sample1), len(sample2))
+
+                print("\n-----Docima para varianzas desconocidas iguales")
+                docima.docima_varianza_desconocidas_iguales(mediaSample1,mediaSample2,varianzaSample1, varianzaSample2, len(sample1), len(sample2))
+
+                print("\n-----Docima para varianzas desconocidas diferentes")
+                docima.docima_varianza_desconocidas_diferentes(mediaSample1,mediaSample2, varianzaSample1, varianzaSample2, len(sample1), len(sample2))
             elif opcion == "3":
                 # Implementar lógica para proporciones
                 pass
@@ -130,17 +231,17 @@ class Menu:
                 # Implementar lógica para comparar proporciones
                 pass
             elif opcion == "5":
-                break
+                # Implementar lógica para P-valor
+                pass
             else:
                 print("Opción no válida. Intente nuevamente.")
             
-
     def pruebas(self):
-        print("Análisis de General de Dependencias")
+        """print("Análisis de General de Dependencias")
         print("Población 1:")
-        #analizar_dependencias(self.pob1)
+        analizar_dependencias(self.pob1)
         print("Población 2:")
-        #analizar_dependencias(self.pob2)
+        analizar_dependencias(self.pob2)"""
 
         print("Prueba de Dependencias")
         aux = input("¿Que población desea analizar? (1 o 2): ")
@@ -153,6 +254,8 @@ class Menu:
             return
         var_num = input("Ingrese la variable numérica: ")
         var_cat = input("Ingrese la variable categórica: ")
+        #print(pob[var_num].describe())
+        #print(pob[var_num].unique())
         bins = input("Ingrese los límites de los bins separados por comas: ").split(',')
         bins = [float(b) for b in bins]
         labels = input("Ingrese las etiquetas de los bins separados por comas: ").split(',')

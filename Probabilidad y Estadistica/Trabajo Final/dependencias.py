@@ -43,7 +43,7 @@ def analizar_dependencias(df):
         })
 
     # 6. Numérica vs Categórica (T-test o ANOVA)
-    """for num, cat in [(n, c) for n in numericas for c in categoricas]:
+    for num, cat in [(n, c) for n in numericas for c in categoricas]:
         grupos = [df.loc[df[cat] == g, num].dropna() for g in df[cat].dropna().unique()]
         if len(grupos) == 2:
             _, p = ttest_ind(*grupos)
@@ -56,7 +56,7 @@ def analizar_dependencias(df):
             "VarA": num, "VarB": cat,
             "TipoA": "num", "TipoB": "cat",
             "Test": prueba, "p": p, "Resultado": dep
-        })"""
+        })
     # ------------------------------------------------------------------
     # 7. DataFrame final
     # ------------------------------------------------------------------
@@ -98,18 +98,19 @@ def prueba_independencia(
         alpha: float = 0.05
     ):
 
+    
     # 1) Discretizar variable numérica
     df = df.copy()
     df[f"{var_num}_cat"] = pd.cut(df[var_num], bins=bins, labels=labels, right=False)
 
     # 2) Tabla de contingencia
     tabla = pd.crosstab(df[f"{var_num}_cat"], df[var_cat])
-    print("\n📋 Tabla de contingencia:")
+    print("\n----- Tabla de contingencia -----")
     print(tabla)
 
     # 3) Chi‑cuadrado con SciPy
     chi2_lib, p, dof, esperada = chi2_contingency(tabla)
-    print("\n📊 Frecuencias esperadas:")
+    print("\n----- Frecuencias esperadas -----")
     print(pd.DataFrame(esperada, index=tabla.index, columns=tabla.columns).round(2))
     print(f"Chi² (SciPy) : {chi2_lib:.2f}")
 
@@ -132,5 +133,13 @@ def prueba_independencia(
 if __name__ == "__main__":
     df = pd.read_csv("C:\\Users\\Ramiro\\OneDrive\\Documentos\\GitHub\\Facultad\\Probabilidad y Estadistica\\Trabajo Final\\poblacion_1.csv")
     analizar_dependencias(df)
-    #Conteo_de_Globulos_rojos            Estado_de_Fumado   num   cat   T-test       NaN    Dependiente
-    # Nivel_de_Hemoglobina                Urbano_Rural   num   cat   T-test       NaN    Dependientes
+    #Poblacion 1
+        #Blastos_de_Médula_Osea          Enfermedad_Crónica   num   cat   T-test      NaN    Dependientes 0.00186
+        #Conteo_de_Globulos_blancos           Mutación_Genética   num   cat   T-test      NaN    Dependientes 0.00794
+        #IMC            Estado_de_Fumado   num   cat   T-test      NaN    Dependientes 0.01919
+        #Nivel_de_Hemoglobina                      Género   num   cat   T-test      NaN    Dependientes 0.0086
+        #Nivel_de_Hemoglobina          Estado_de_Leucemia   num   cat   T-test      NaN    Dependientes 0.04296
+    #Poblacion 2
+        #Blastos_de_Médula_Osea          Enfermedad_Crónica   num   cat   T-test      NaN    Dependientes 0.03362
+        #Conteo_de_Globulos_rojos           Mutación_Genética   num   cat   T-test      NaN    Dependientes 0.02717
+        #Conteo_de_Globulos_rojos    Trastornos_Inmunológicos   num   cat   T-test      NaN    Dependientes 0.03307

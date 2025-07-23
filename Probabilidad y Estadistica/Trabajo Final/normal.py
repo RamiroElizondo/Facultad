@@ -1,41 +1,10 @@
-"""import pandas as pd
-from scipy.stats import shapiro
-
-# Cargar el archivo
-df = pd.read_csv("water_potability.csv")
-
-# Seleccionar columnas numéricas (sin ID)
-numericas = df.select_dtypes(include=["number"]).columns.difference(["ID_Paciente"])
-
-# Resultado por variable
-resultados = []
-
-pd.set_option('display.float_format', '{:.10f}'.format)
-for col in numericas:
-    data = df[col].dropna()
-    
-    # Shapiro solo permite hasta 5000 datos
-    muestra = data.sample(n=5000, random_state=42) if len(data) > 5000 else data
-
-    stat, p = shapiro(muestra)
-    normalidad = "Distribución normal" if p >= 0.05 else "No normal"
-
-    resultados.append({
-        "Variable": col,
-        "Estadístico Shapiro": stat,
-        "p-valor": p,
-        "Resultado": normalidad
-    })
-
-# Mostrar resultados
-df_resultados = pd.DataFrame(resultados)
-print(df_resultados)"""
 from scipy.stats import shapiro, kstest, anderson, normaltest, jarque_bera
 import pandas as pd
 
 def test_normalidad(df):
     resultados = []
-
+    
+    df = df.loc[:, ~df.columns.duplicated()]
     columnas = df.select_dtypes(include=["number"]).columns
 
     for col in columnas:

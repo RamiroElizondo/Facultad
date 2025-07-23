@@ -127,7 +127,7 @@ class Analisis_exploratorio:
                 plt.close()
 
             else:
-                print(f"⚠️ No se pudo graficar la columna: {col}")
+                print(f"No se pudo graficar la columna: {col}")
                 continue
 
-        print(f"✅ Gráficos guardados en la carpeta: {OUTPUT_DIR}")
+        print(f"Gráficos guardados en la carpeta: {OUTPUT_DIR}")
