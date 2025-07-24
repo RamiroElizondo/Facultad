@@ -129,7 +129,9 @@ def prueba_independencia(
         print("Se rechaza H₀ → Variables DEPENDIENTES")
     else:
         print("No se rechaza H₀ → Variables INDEPENDIENTES")
-    
+
+    return results
+
 if __name__ == "__main__":
     df = pd.read_csv("C:\\Users\\Ramiro\\OneDrive\\Documentos\\GitHub\\Facultad\\Probabilidad y Estadistica\\Trabajo Final\\poblacion_1.csv")
     analizar_dependencias(df)

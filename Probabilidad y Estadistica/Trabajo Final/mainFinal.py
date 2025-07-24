@@ -113,12 +113,15 @@ class Menu:
                 pob_filtrada = pob[pob["Edad"] > 60]
             elif condicion == "mujeres":
                 pob_filtrada = pob[pob["Género"] == "Female"]
+            elif condicion == "estado_positivo":
+                pob_filtrada = pob[pob["Estado_de_Leucemia"] == "Positive"]
             sample = pob_filtrada.loc[pob_filtrada["Género"] == "Female", variable]
             mediaSample = sample.mean()
             varianzaSample = sample.var(ddof=1)
 
             mediaPoblacional = pob[variable].mean()
             varianzaPoblacional = pob[variable].var(ddof=1)
+            return sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional
         else: 
             sample = pob[variable].dropna().sample(n, random_state=42)
             mediaSample = sample.mean()
@@ -166,8 +169,6 @@ class Menu:
             if opcion == "6":
                 print("Saliendo del análisis de docimas...")
                 break
-
-            
             if opcion == "1":
                 aux = input("¿Que población: (1 o 2)? ")
                 pob = None
@@ -181,31 +182,39 @@ class Menu:
                     print("Opción no válida. Intente nuevamente.")
                     continue
                 print("\n==== Docima respecto a medias y varianza poblacional ====\n")
-                print("\n-----Docima para mu cuando sigma cuadrado es conocido")
+                print("-----Docima para mu cuando sigma cuadrado es conocido")
                 n = int(input("Ingrese el tamaño de la muestra: "))
                
                 sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
                 if sample is None:
+                    print("Muestra no válida. Intente nuevamente.")
                     continue
-                docima.docima_varianza_conocida(mediaSample, varianzaPoblacional,n)
+                valor = docima.docima_varianza_conocida(mediaSample,n)
+                if valor is None:
+                    continue
 
                 print("\n-----Docima para mu cuando sigma cuadrado es desconocido")
                 n = int(input("Ingrese el tamaño de la muestra: "))
                 sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
                 if sample is None:
                     continue
-                docima.docima_varianza_desconocida(mediaSample, varianzaSample,n)
+                valor = docima.docima_varianza_desconocida(mediaSample, varianzaSample,n)
+                if valor is None:
+                    continue
                 
                 print("\n------Docima para sigma cuadrado")
                 n = int(input("Ingrese el tamaño de la muestra: "))
                 sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
                 if sample is None:
                     continue
-                docima.docima_media_varianza_desconocida(varianzaSample,n)
+                valor=docima.docima_media_varianza_desconocida(varianzaSample,n)
+                if valor is None:
+                    continue
             
             elif opcion == "2":
                 print("\n==== Docima para comparar medias de dos poblaciones ====\n")
                 #Muestra 1
+                """print("-----Docima para varianzas conocidas iguales")
                 condicion = input("Condicion de la muestra: ")
                 print("Población 1:")
                 sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
@@ -213,29 +222,87 @@ class Menu:
                 sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
                 if sample1 is None or sample2 is None:
                     continue
-                print("-----Docima para varianzas conocidas iguales")
-                docima.docima_varianzas_conocidas_iguales(mediaSample1, mediaSample2, len(sample1), len(sample2))
+                
+                valor = docima.docima_varianzas_conocidas_iguales(mediaSample1, mediaSample2, len(sample1), len(sample2))
+                if valor is None:
+                    continue
 
                 print("\n-----Docima para varianzas conocidas diferentes")
-                docima.docima_varianzas_conocidas_diferentes(mediaSample1, mediaSample2, varianzaPoblacional1,varianzaPoblacional2, len(sample1), len(sample2))
+                condicion = input("Condicion de la muestra: ")
+                print("Población 1:")
+                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
+                print("Población 2:")
+                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
+                
+                valor = docima.docima_varianzas_conocidas_diferentes(mediaSample1, mediaSample2, varianzaPoblacional1,varianzaPoblacional2, len(sample1), len(sample2))
+                if valor is None:
+                    continue"""
 
                 print("\n-----Docima para varianzas desconocidas iguales")
-                docima.docima_varianza_desconocidas_iguales(mediaSample1,mediaSample2,varianzaSample1, varianzaSample2, len(sample1), len(sample2))
+                condicion = input("Condicion de la muestra: ")
+                print("Población 1:")
+                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
+                print("Población 2:")
+                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
 
+                valor = docima.docima_varianza_desconocidas_iguales(mediaSample1,mediaSample2,varianzaSample1, varianzaSample2, len(sample1), len(sample2))
+                if valor is None:
+                    continue    
                 print("\n-----Docima para varianzas desconocidas diferentes")
-                docima.docima_varianza_desconocidas_diferentes(mediaSample1,mediaSample2, varianzaSample1, varianzaSample2, len(sample1), len(sample2))
+                print("Población 1:")
+                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
+                print("Población 2:")
+                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
+                valor = docima.docima_varianza_desconocidas_diferentes(mediaSample1,mediaSample2, varianzaSample1, varianzaSample2, len(sample1), len(sample2))
+                if valor is None:
+                    continue
             elif opcion == "3":
-                # Implementar lógica para proporciones
-                pass
+                aux = input("¿Que población: (1 o 2)? ")
+                pob = None
+                if aux == "1":
+                    pob = self.pob1.copy()
+                    print("Población 1 seleccionada.")
+                elif aux == "2":
+                    pob = self.pob2.copy()
+                    print("Población 2 seleccionada.")
+                else:
+                    print("Opción no válida. Intente nuevamente.")
+                    continue
+                docima.docima_para_proporcion_poblacional(pob)
             elif opcion == "4":
-                # Implementar lógica para comparar proporciones
-                pass
+                docima.docima_diferencia_proporciones(self.pob1, self.pob2)
             elif opcion == "5":
-                # Implementar lógica para P-valor
-                pass
+                condicion = input("Condicion de la muestra: ")
+
+                aux = input("¿Que población: (1 o 2)? ")
+                pob = None
+                if aux == "1":
+                    pob = self.pob1.copy()
+                    print("Población 1 seleccionada.")
+                elif aux == "2":
+                    pob = self.pob2.copy()
+                    print("Población 2 seleccionada.")
+                else:
+                    print("Opción no válida. Intente nuevamente.")
+                    continue
+                
+                # crear muestra aca
+                variable = input("Ingrese la variable numérica para el p-valor: ")
+                if variable not in pob.columns:
+                    print(f"La variable '{variable}' no se encuentra en la población seleccionada.")
+                    continue
+                print(f"Variable seleccionada: {variable}")
+                condicion = input("Ingrese la condicion de la muestra (menores_30, mayores_60, mujeres, estado_positivo): ")
+                pob_filtrada = pob.loc[pob["Estado_de_Leucemia"] == "Positive", variable]
+                
+                n = int(input("Ingrese el tamaño de la muestra: "))
+                sample = pob[variable].dropna().sample(n, random_state=42)
+                mediaSample = sample.mean()
+                varianzaSample = sample.var(ddof=1)
+                docima.p_valor(mediaSample, varianzaSample, len(sample))
             else:
                 print("Opción no válida. Intente nuevamente.")
-            
+                continue
     def pruebas(self):
         """print("Análisis de General de Dependencias")
         print("Población 1:")
