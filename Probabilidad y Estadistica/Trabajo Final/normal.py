@@ -1,5 +1,6 @@
 from scipy.stats import shapiro, kstest, anderson, normaltest, jarque_bera
 import pandas as pd
+from dependencias import prueba_bondad_ajuste
 
 def test_normalidad(df):
     resultados = []
@@ -55,4 +56,19 @@ def test_normalidad(df):
 
     return pd.DataFrame(resultados)
 
+def test_normalidad_bondad(df):
+    df = df.loc[:, ~df.columns.duplicated()]
+    columnas = df.select_dtypes(include=["number"]).columns
 
+    for col in columnas:
+        x = df[col].dropna()
+        print(f"--------Variable: {col}--------")
+
+        x = df[col].dropna()
+
+        res = prueba_bondad_ajuste(x, bins=8, alpha=0.05)
+
+
+        print(f"Chi² = {res['chi2']:.3f}  |  gl = {res['df']}  |  χ² crítico = {res['crit']:.3f}")
+        #print(f"p-value = {res['p_value']:.4f}")
+        print("Decisión:", res["decision"])

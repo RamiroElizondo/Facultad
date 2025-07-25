@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
-from dependencias import analizar_dependencias, prueba_dependencias, prueba_independencia
+from dependencias import analizar_dependencias, prueba_dependencias, prueba_independencia, prueba_bondad_ajuste, prueba_homogeneidad
 from analisis_exploratorio import Analisis_exploratorio
-from normal import test_normalidad
+from normal import test_normalidad, test_normalidad_bondad
 from docimas import Docimas
 import os
 
@@ -89,15 +89,22 @@ class Menu:
         #objeto_analisis2.guardar_graficos()
 
     def analisis_normalidad(self):
-        print("\n=== Análisis de Normalidad ===")
-        print("Población 1:")
-        df_resultados = test_normalidad(self.pob1)
-        print("Resultados de la prueba de normalidad:")
-        print(df_resultados)
-        print("\nPoblación 2:")
-        df_resultados = test_normalidad(self.pob2)
-        print("Resultados de la prueba de normalidad:")
-        print(df_resultados)
+        metodo = input("Con(Shapiro, Kolmogorov-Smirnov, Anderson-Darling, D'Agostino y Pearson, Jarque-Bera o Con Pruebas de bondad de ajuste): ").lower()
+        if metodo == "bondad":
+            print("\n=== Prueba de Bondad de Ajuste a la Normalidad Población 1 ===")
+            test_normalidad_bondad(self.pob1)
+            print("\n=== Prueba de Bondad de Ajuste a la Normalidad Población 2 ===")
+            test_normalidad_bondad(self.pob2)
+        else:
+            print("\n=== Análisis de Normalidad ===")
+            print("Población 1:")
+            df_resultados = test_normalidad(self.pob1)
+            print("Resultados de la prueba de normalidad:")
+            print(df_resultados)
+            print("\nPoblación 2:")
+            df_resultados = test_normalidad(self.pob2)
+            print("Resultados de la prueba de normalidad:")
+            print(df_resultados)
 
     def creacion_muestra(self, pob, n=5000, condicion=None):
         variable = input("Ingrese la variable numérica para la docima: ")
@@ -106,6 +113,7 @@ class Menu:
             return None, None, None, None, None
         print(f"Variable seleccionada: {variable}")
         if condicion != None:
+            pob_filtrada = pob.copy()
             #La condicion puede ser: pacientes menores de 30 años, pacientes mayores a 60 años, pacientes mujeres,
             if condicion == "menores_30":
                 pob_filtrada = pob[pob["Edad"] < 30]
@@ -115,13 +123,12 @@ class Menu:
                 pob_filtrada = pob[pob["Género"] == "Female"]
             elif condicion == "estado_positivo":
                 pob_filtrada = pob[pob["Estado_de_Leucemia"] == "Positive"]
-            sample = pob_filtrada.loc[pob_filtrada["Género"] == "Female", variable]
-            mediaSample = sample.mean()
-            varianzaSample = sample.var(ddof=1)
+            mediaSample = pob_filtrada[variable].mean()
+            varianzaSample = pob_filtrada[variable].var(ddof=1)
 
             mediaPoblacional = pob[variable].mean()
             varianzaPoblacional = pob[variable].var(ddof=1)
-            return sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional
+            return pob_filtrada, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional
         else: 
             sample = pob[variable].dropna().sample(n, random_state=42)
             mediaSample = sample.mean()
@@ -214,8 +221,8 @@ class Menu:
             elif opcion == "2":
                 print("\n==== Docima para comparar medias de dos poblaciones ====\n")
                 #Muestra 1
-                """print("-----Docima para varianzas conocidas iguales")
-                condicion = input("Condicion de la muestra: ")
+                print("-----Docima para varianzas conocidas iguales")
+                condicion = input("Condicion de la muestra (menores_30,mayores_60,mujeres,estado_positivo): ")
                 print("Población 1:")
                 sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
                 print("Población 2:")
@@ -236,7 +243,7 @@ class Menu:
                 
                 valor = docima.docima_varianzas_conocidas_diferentes(mediaSample1, mediaSample2, varianzaPoblacional1,varianzaPoblacional2, len(sample1), len(sample2))
                 if valor is None:
-                    continue"""
+                    continue
 
                 print("\n-----Docima para varianzas desconocidas iguales")
                 condicion = input("Condicion de la muestra: ")
@@ -250,12 +257,13 @@ class Menu:
                     continue    
                 print("\n-----Docima para varianzas desconocidas diferentes")
                 print("Población 1:")
-                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1, condicion=condicion)
+                sample1, mediaSample1, varianzaSample1, mediaPoblacional1, varianzaPoblacional1 = self.creacion_muestra(self.pob1)
                 print("Población 2:")
-                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2, condicion=condicion)
+                sample2, mediaSample2, varianzaSample2, mediaPoblacional2, varianzaPoblacional2 = self.creacion_muestra(self.pob2)
                 valor = docima.docima_varianza_desconocidas_diferentes(mediaSample1,mediaSample2, varianzaSample1, varianzaSample2, len(sample1), len(sample2))
                 if valor is None:
                     continue
+            
             elif opcion == "3":
                 aux = input("¿Que población: (1 o 2)? ")
                 pob = None
@@ -269,10 +277,11 @@ class Menu:
                     print("Opción no válida. Intente nuevamente.")
                     continue
                 docima.docima_para_proporcion_poblacional(pob)
+            
             elif opcion == "4":
                 docima.docima_diferencia_proporciones(self.pob1, self.pob2)
+            
             elif opcion == "5":
-                condicion = input("Condicion de la muestra: ")
 
                 aux = input("¿Que población: (1 o 2)? ")
                 pob = None
@@ -285,24 +294,13 @@ class Menu:
                 else:
                     print("Opción no válida. Intente nuevamente.")
                     continue
-                
-                # crear muestra aca
-                variable = input("Ingrese la variable numérica para el p-valor: ")
-                if variable not in pob.columns:
-                    print(f"La variable '{variable}' no se encuentra en la población seleccionada.")
-                    continue
-                print(f"Variable seleccionada: {variable}")
-                condicion = input("Ingrese la condicion de la muestra (menores_30, mayores_60, mujeres, estado_positivo): ")
-                pob_filtrada = pob.loc[pob["Estado_de_Leucemia"] == "Positive", variable]
-                
                 n = int(input("Ingrese el tamaño de la muestra: "))
-                sample = pob[variable].dropna().sample(n, random_state=42)
-                mediaSample = sample.mean()
-                varianzaSample = sample.var(ddof=1)
+                sample, mediaSample, varianzaSample, mediaPoblacional, varianzaPoblacional = self.creacion_muestra(pob,n)
                 docima.p_valor(mediaSample, varianzaSample, len(sample))
             else:
                 print("Opción no válida. Intente nuevamente.")
                 continue
+    
     def pruebas(self):
         """print("Análisis de General de Dependencias")
         print("Población 1:")
@@ -310,24 +308,85 @@ class Menu:
         print("Población 2:")
         analizar_dependencias(self.pob2)"""
 
-        print("Prueba de Dependencias")
-        aux = input("¿Que población desea analizar? (1 o 2): ")
-        if aux == "1":
-            pob = self.pob1
-        elif aux == "2":
-            pob = self.pob2
-        else:
-            print("Opción no válida. Saliendo del análisis de dependencias.")
-            return
-        var_num = input("Ingrese la variable numérica: ")
-        var_cat = input("Ingrese la variable categórica: ")
-        #print(pob[var_num].describe())
-        #print(pob[var_num].unique())
-        bins = input("Ingrese los límites de los bins separados por comas: ").split(',')
-        bins = [float(b) for b in bins]
-        labels = input("Ingrese las etiquetas de los bins separados por comas: ").split(',')
-        labels = [label.strip() for label in labels]
-        prueba_independencia(pob, var_num, bins, labels, var_cat)
+        while True:
+            print("\n=== ================== ===")
+            print("1. Prueba de Bondad de Ajuste")
+            print("2. Prueba de Independencia")
+            print("3. Prueba de Homogeneidad")
+            print("4. Salir")
+            opcion = input("Seleccione una opción: ")
+            
+            if opcion == "1":
+                print("\n=== Prueba de Bondad de Ajuste ===")
+                aux = input("¿Que población desea analizar? (1 o 2): ")
+                if aux == "1":
+                    pob = self.pob1
+                elif aux == "2":
+                    pob = self.pob2
+                else:
+                    print("Opción no válida. Saliendo del análisis de dependencias.")
+                    continue
+                variable = input("Ingrese la variable numérica: ")
+                if variable not in pob.columns:
+                    print(f"La variable '{variable}' no se encuentra en la población seleccionada.")
+                    continue
+                print(f"Variable seleccionada: {variable}")
+                x = pob[variable]
+
+                res = prueba_bondad_ajuste(x, bins=8, alpha=0.05)
+
+                print(f"Media mu = {res['mu']:.2f}, Desvio sigma = {res['sigma']:.2f}")
+
+                print("\nTabla de intervalos (esperadas):")
+                print(res["tabla_intervalos"].round(4))
+
+                print("\nTabla de aportes al Chi²:")
+                print(res["tabla_aportes"].round(4))
+
+                print(f"Chi² = {res['chi2']:.3f}  |  gl = {res['df']}  |  χ² crítico = {res['crit']:.3f}")
+                #print(f"p-value = {res['p_value']:.4f}")
+                print("Decisión:", res["decision"])
+                
+            elif opcion == "2":
+                print("\n=== Prueba de Independencia ===")
+                aux = input("¿Que población desea analizar? (1 o 2): ")
+                if aux == "1":
+                    pob = self.pob1
+                elif aux == "2":
+                    pob = self.pob2
+                else:
+                    print("Opción no válida. Saliendo del análisis de dependencias.")
+                    continue
+
+                var_num = input("Ingrese la variable numérica: ")
+                var_cat = input("Ingrese la variable categórica: ")
+                #print(pob[var_num].describe())
+                #print(pob[var_num].unique())
+                bins = input("Ingrese los límites de los bins separados por comas: ").split(',')
+                bins = [float(b) for b in bins]
+                labels = input("Ingrese las etiquetas de los bins separados por comas: ").split(',')
+                labels = [label.strip() for label in labels]
+                prueba_independencia(pob, var_num, bins, labels, var_cat)
+ 
+            elif opcion == "3":
+                print("\n=== Prueba de Homogeneidad ===")
+                grupo1 = input("Ingrese el nombre del primer grupo: ")
+                grupo2 = input("Ingrese el nombre del segundo grupo: ")
+                variable = input("Ingrese la variable categórica: ")
+                if variable not in self.pob1.columns or variable not in self.pob2.columns:
+                    print(f"La variable '{variable}' no se encuentra en las poblaciones seleccionadas.")
+                    continue
+                print(f"Variable seleccionada: {variable}")
+                prueba_homogeneidad(self.pob1, self.pob2, variable, grupo1, grupo2, alpha=0.05)
+            elif opcion == "4":
+                print("Saliendo del análisis de dependencias...")
+                break
+            else:
+                print("Opción no válida. Intente nuevamente.")
+        
+        
+    
+        
 
 if __name__ == "__main__":
     menu = Menu()

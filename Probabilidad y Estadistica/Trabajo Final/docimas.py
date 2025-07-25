@@ -409,6 +409,8 @@ class Docimas:
         self.graficar_z(z, alfa, "diferenteProporciones", "Docima de diferencia de proporciones")
 
     def p_valor(self,mediaSample, varianzaSample, n):
+        print("Media Muestral:", mediaSample)
+        print("Varianza Muestral:", varianzaSample)
         """
         Calcula el p-valor para una docima de media con varianza poblacional conocida.
         """
@@ -416,20 +418,25 @@ class Docimas:
         alternativa = input("Ingrese la alternativa (mayor, menor, diferente): ").lower()
         alfa = float(input("Ingrese el nivel de significancia (alfa): "))
         # Calcular el estadístico t
+        print(mediaSample, "-", media, "/", np.sqrt(varianzaSample), "/", np.sqrt(n))
         t = (mediaSample - media) / (np.sqrt(varianzaSample) / np.sqrt(n))
         print(f"T calculado: {t:.2f}")
         # Calcular el p-valor
-        
+        gl = n - 1  # grados de libertad
+        print(f"Grados de libertad: {gl}")
+
         if alternativa == "mayor":
             print("Calculando p-valor para la alternativa 'mayor'")
             # p-valor = p izq = P(T<t), hay que usar la tabla de t
-            p_valor = 1 - t_dist.cdf(t, df=n-1)
-            
+            print("Calculando p-valor para la alternativa 'mayor")
+            p_valor = 1 - t_dist.cdf(t, df=gl)
+
         elif alternativa == "menor":
             # p-valor = p der = P(T>t), hay que usar la tabla de t
-            p_valor = t_dist.cdf(t, df=n-1)
+            p_valor = t_dist.cdf(t, df=gl)
         elif alternativa == "diferente":
-            p_izq = t_dist.cdf(t, df=n-1)
+            print("Diferente",t_dist.cdf(t, df=gl))
+            p_izq = t_dist.cdf(t, df=gl)
             p_der = 1 - t_dist.cdf(t, df=n-1)
             p_valor = 2 * min(p_izq, p_der)
         else:
