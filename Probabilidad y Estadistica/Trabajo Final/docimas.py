@@ -221,17 +221,22 @@ class Docimas:
         
         return z
     
-    def docima_varianza_desconocidas_iguales(self, mediaSample1, mediaSample2, varianzaSample1, varianzaSample2, n1, n2):
+    def docima_varianza_desconocidas_iguales(self, mediaSample1, mediaSample2, varianzaSample1, varianzaSample2, tamano1, tamano2):
         
         alfa = float(input("Ingrese el nivel de significancia (alfa): "))
 
         mayor,menor = 0,0
+        n1,n2 = 0,0
         if varianzaSample1 > varianzaSample2:
             mayor = varianzaSample1
             menor = varianzaSample2
+            n1 = tamano1
+            n2 = tamano2
         else:
             mayor = varianzaSample2
             menor = varianzaSample1
+            n1 = tamano2
+            n2 = tamano1
         
         #calular F
         F = (mayor / menor).round(2)
